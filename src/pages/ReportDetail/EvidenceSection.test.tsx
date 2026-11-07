@@ -1,6 +1,7 @@
 import React from "react";
 import {render, screen, within} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import {MemoryRouter} from "react-router";
 import {evidenceFixture, evidenceMessageFixture, reportFixture} from "@/test/mockApi";
 import {EvidenceSection} from "./EvidenceSection";
 
@@ -10,7 +11,7 @@ const fromTarget = {sender_id: report.target.id};
 
 function renderEvidence(messages = [evidenceMessageFixture(fromReporter)], overrides = {}) {
     const current = reportFixture({...report, evidence: evidenceFixture({messages, ...overrides})});
-    return render(<EvidenceSection report={current} />);
+    return render(<EvidenceSection report={current} />, {wrapper: MemoryRouter});
 }
 
 describe("EvidenceSection", () => {
@@ -39,17 +40,19 @@ describe("EvidenceSection", () => {
             target: {...report.target, title: "Tgt title", avatar_url: null},
             evidence: evidenceFixture({messages: [evidenceMessageFixture({...fromTarget, body: "b"}), evidenceMessageFixture({...fromReporter, body: "a"})]}),
         });
-        const {container} = render(<EvidenceSection report={current} />);
+        const {container} = render(<EvidenceSection report={current} />, {wrapper: MemoryRouter});
         const items = screen.getAllByRole("listitem");
         expect(within(items[0]).getByText("舉報人 · Rep title")).toBeInTheDocument();
         expect(within(items[1]).getByText("被舉報人 · Tgt title")).toBeInTheDocument();
         expect(items[0].querySelector("img")).toHaveAttribute("src", "https://img.example/r.jpg");
         expect(items[1].querySelector("img")).toBeNull();
         expect(container).toBeTruthy();
+        expect(within(items[0]).getByRole("link", {name: "查看用戶"})).toHaveAttribute("href", `/users/${report.reporter_id}`);
+        expect(within(items[1]).getByRole("link", {name: "查看用戶"})).toHaveAttribute("href", `/users/${report.target.id}`);
     });
 
     it("shows the expired note and no chat when evidence is null", () => {
-        render(<EvidenceSection report={reportFixture({evidence: null})} />);
+        render(<EvidenceSection report={reportFixture({evidence: null})} />, {wrapper: MemoryRouter});
         expect(screen.getByText("證據已超過保留期限（90 日），已被清除")).toBeInTheDocument();
         expect(screen.queryByRole("list")).not.toBeInTheDocument();
         expect(screen.getByRole("note")).toHaveTextContent("快照");

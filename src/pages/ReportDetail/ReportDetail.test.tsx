@@ -61,13 +61,15 @@ describe("ReportDetail page", () => {
         expect(document.querySelector("script")).toBeNull();
     });
 
-    it("shows the target card with the full id, a red count at 3 and the user link", async () => {
+    it("shows the target card without the raw id, a red count at 3 and the user link", async () => {
         const report = reportFixture({target: {id: "target-full-id", status: "active", open_reports: 3}});
         mockApi(() => ({status: 200, data: report}));
         renderPage(`/reports/${report.id}`);
-        await screen.findByText("target-full-id");
+        await screen.findByText("3");
+        expect(screen.queryByText("target-full-id")).not.toBeInTheDocument();
         expect(screen.getByText("3")).toHaveClass("text-red-700");
-        expect(screen.getByRole("link", {name: /查看用戶/})).toHaveAttribute("href", "/users/target-full-id");
+        const hrefs = screen.getAllByRole("link", {name: /查看用戶/}).map(link => link.getAttribute("href"));
+        expect(hrefs).toContain("/users/target-full-id");
     });
 
     it("does not highlight 2 open reports", async () => {

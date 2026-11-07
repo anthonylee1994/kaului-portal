@@ -1,6 +1,5 @@
 import React from "react";
 import type {ReportItem} from "@/api/types";
-import {IdTag} from "@/components/IdTag";
 import {ReasonChip} from "@/components/ReasonChip";
 import {StatusChip} from "@/components/StatusChip";
 import {TimeText} from "@/components/TimeText";
@@ -23,7 +22,7 @@ export const ReportHeader = ({report}: {report: ReportItem}) => (
             <div>
                 <dt className="text-xs text-black/60">{t("reportDetail.reporter")}</dt>
                 <dd>
-                    <UserCell id={report.reporter_id} title={report.reporter_title} avatarUrl={report.reporter_avatar_url} />
+                    <UserCell id={report.reporter_id} title={report.reporter_title} avatarUrl={report.reporter_avatar_url} avatarLink />
                 </dd>
             </div>
             {report.resolved_at !== null && (
@@ -35,8 +34,5 @@ export const ReportHeader = ({report}: {report: ReportItem}) => (
                 </div>
             )}
         </dl>
-        <div className="break-all">
-            <IdTag id={report.id} full />
-        </div>
     </section>
 );

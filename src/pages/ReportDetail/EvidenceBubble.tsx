@@ -1,7 +1,7 @@
 import React from "react";
-import {User} from "lucide-react";
 import type {EvidenceMessage} from "@/api/types";
 import {TimeText} from "@/components/TimeText";
+import {UserAvatar} from "@/components/UserAvatar";
 import {t} from "@/i18n";
 import {SafeImage} from "./SafeImage";
 
@@ -20,6 +20,7 @@ const SIDE_LABELS = {
 } as const;
 
 export interface Sender {
+    id: string;
     title?: string | null;
     avatarUrl?: string | null;
 }
@@ -29,9 +30,7 @@ export const EvidenceBubble = ({message, side, sender, onOpenImage}: {message: E
     return (
         <li className={`flex max-w-[80%] flex-col gap-1 rounded-xl px-3 py-2 ${SIDE_STYLES[side]}`}>
             <span className="flex items-center gap-1.5 text-xs text-black/60">
-                <span className="flex size-5 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black/10 text-black/40">
-                    <SafeImage src={sender?.avatarUrl ?? null} alt="" className="size-5 rounded-full object-cover" fallback={<User aria-hidden className="size-3" />} />
-                </span>
+                <UserAvatar src={sender?.avatarUrl} size="xs" linkTo={sender?.id} />
                 <span className="break-all">{sender?.title ? `${t(SIDE_LABELS[side])} · ${sender.title}` : t(SIDE_LABELS[side])}</span>
             </span>
             {message.kind === "image" ? (

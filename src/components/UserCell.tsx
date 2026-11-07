@@ -1,14 +1,12 @@
 import React from "react";
-import {User} from "lucide-react";
 import {IdTag} from "@/components/IdTag";
-import {SafeImage} from "@/pages/ReportDetail/SafeImage";
+import {UserAvatar} from "@/components/UserAvatar";
 
 // Avatar + Title; clicking the Title copies the user id. Without a Title the short id is shown instead.
-export const UserCell = ({id, title, avatarUrl}: {id: string; title?: string | null; avatarUrl?: string | null}) => (
+// `avatarLink` makes the avatar open the user's page.
+export const UserCell = ({id, title, avatarUrl, avatarLink = false}: {id: string; title?: string | null; avatarUrl?: string | null; avatarLink?: boolean}) => (
     <span className="inline-flex items-center gap-2">
-        <span className="flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black/10 text-black/40">
-            <SafeImage src={avatarUrl ?? null} alt="" className="size-7 rounded-full object-cover" fallback={<User aria-hidden className="size-4" />} />
-        </span>
+        <UserAvatar src={avatarUrl} size="sm" linkTo={avatarLink ? id : undefined} />
         <IdTag id={id} label={title || null} />
     </span>
 );

@@ -1,7 +1,7 @@
 import React from "react";
 import {Modal} from "@heroui/react";
-import {User} from "lucide-react";
 import type {ReportItem} from "@/api/types";
+import {UserAvatar} from "@/components/UserAvatar";
 import {t} from "@/i18n";
 import {EvidenceBubble, type Sender, type Side} from "./EvidenceBubble";
 import {SafeImage} from "./SafeImage";
@@ -21,7 +21,11 @@ export const EvidenceSection = ({report}: {report: ReportItem}) => {
     const sideOf = (senderId: string): Side => (senderId === report.reporter_id ? "reporter" : senderId === report.target.id ? "target" : "other");
 
     const senderOf = (side: Side): Sender | undefined =>
-        side === "reporter" ? {title: report.reporter_title, avatarUrl: report.reporter_avatar_url} : side === "target" ? {title: report.target.title, avatarUrl: report.target.avatar_url} : undefined;
+        side === "reporter"
+            ? {id: report.reporter_id, title: report.reporter_title, avatarUrl: report.reporter_avatar_url}
+            : side === "target"
+              ? {id: report.target.id, title: report.target.title, avatarUrl: report.target.avatar_url}
+              : undefined;
 
     return (
         <section className="space-y-3 rounded-2xl border border-black/15 bg-white p-4">
@@ -34,9 +38,7 @@ export const EvidenceSection = ({report}: {report: ReportItem}) => {
             ) : (
                 <React.Fragment>
                     <div className="flex items-center gap-3">
-                        <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black/10 text-black/40">
-                            <SafeImage src={evidence.avatar_url} alt={t("reportDetail.avatarAlt")} className="size-12 rounded-full object-cover" fallback={<User aria-hidden className="size-6" />} />
-                        </div>
+                        <UserAvatar src={evidence.avatar_url} alt={t("reportDetail.avatarAlt")} size="lg" linkTo={report.target.id} />
                         <p className="text-base break-words">{evidence.title ?? t("reportDetail.noTitle")}</p>
                     </div>
                     {hasMessages ? (
