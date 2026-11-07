@@ -9,7 +9,14 @@ import {Reports} from "./index";
 import {PAGE_SIZE} from "./useReportList";
 
 function renderReports(path = "/reports") {
-    const router = createMemoryRouter([{path: "/reports", element: <Reports />}], {initialEntries: [path]});
+    const router = createMemoryRouter(
+        [
+            {path: "/reports", element: <Reports />},
+            {path: "/users/:id", element: <p>user</p>},
+            {path: "/reports/:id", element: <p>detail</p>},
+        ],
+        {initialEntries: [path]}
+    );
     render(<RouterProvider router={router} />);
     return {router, user: userEvent.setup()};
 }
@@ -32,6 +39,17 @@ describe("Reports page", () => {
         renderReports();
         await waitFor(() => expect(rowsOf()).toHaveLength(1));
         expect(requests[0].params).toEqual({status: "open", limit: PAGE_SIZE});
+    });
+
+    it("links both avatars to the user pages", async () => {
+        const report = reportFixture();
+        mockApi(() => reportListReply([report]));
+        const {router, user} = renderReports();
+        await waitFor(() => expect(rowsOf()).toHaveLength(1));
+        const links = within(rowsOf()[0]).getAllByRole("link", {name: "查看用戶"});
+        expect(links.map(link => link.getAttribute("href"))).toEqual([`/users/${report.target.id}`, `/users/${report.reporter_id}`]);
+        await user.click(links[0]);
+        expect(router.state.location.pathname).toBe(`/users/${report.target.id}`);
     });
 
     it("treats an invalid ?status as open without rewriting the URL", async () => {

@@ -1,29 +1,24 @@
 import React from "react";
-import {User as UserIcon} from "lucide-react";
 import type {AdminUser} from "@/api/types";
 import {IdTag} from "@/components/IdTag";
 import {StatusChip} from "@/components/StatusChip";
 import {TimeText} from "@/components/TimeText";
+import {UserAvatar} from "@/components/UserAvatar";
 import {t} from "@/i18n";
 import {REPEAT_OFFENDER_THRESHOLD} from "@/lib/reportRules";
-import {SafeImage} from "@/pages/ReportDetail/SafeImage";
 
 export const UserSummary = ({user}: {user: AdminUser}) => {
     const repeatOffender = user.open_reports >= REPEAT_OFFENDER_THRESHOLD;
     return (
         <div className="space-y-3">
             <div className="flex items-center gap-3">
-                <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black/10 text-black/40">
-                    <SafeImage src={user.avatar_url} alt={t("user.avatarAlt")} className="size-12 rounded-full object-cover" fallback={<UserIcon aria-hidden className="size-6" />} />
-                </div>
+                <UserAvatar src={user.avatar_url} alt={t("user.avatarAlt")} size="lg" />
                 <div className="min-w-0 space-y-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                        <span className="break-all">
-                            <IdTag id={user.id} full />
-                        </span>
-                        <StatusChip kind="user" value={user.status} />
-                    </div>
-                    <p className="text-base break-words">{user.title ?? t("user.noTitle")}</p>
+                    {/* The id is never shown; clicking the title copies it. */}
+                    <p className="text-base break-words">
+                        <IdTag id={user.id} label={user.title ?? t("user.noTitle")} />
+                    </p>
+                    <StatusChip kind="user" value={user.status} />
                 </div>
             </div>
             <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">

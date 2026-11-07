@@ -64,7 +64,7 @@ describe("page states", () => {
         const user = adminUserFixture();
         mockApi(() => ({status: 200, data: user}));
         renderPage(user);
-        expect(await screen.findByText(user.id)).toBeInTheDocument();
+        expect(await screen.findByText(user.title as string)).toBeInTheDocument();
         expect(screen.getByText("收件箱數量")).toBeInTheDocument();
     });
 
@@ -83,7 +83,7 @@ describe("page states", () => {
         expect(await screen.findByRole("alert")).toBeInTheDocument();
         fail = false;
         await ui.click(screen.getByRole("button", {name: "重試"}));
-        expect(await screen.findByText(user.id)).toBeInTheDocument();
+        expect(await screen.findByText(user.title as string)).toBeInTheDocument();
     });
 
     it("never shows the previous user after the id changes", async () => {
@@ -92,12 +92,12 @@ describe("page states", () => {
         const gate = deferred();
         mockApi(request => (request.url.endsWith(b.id) ? gate.promise : {status: 200, data: a}));
         const {router} = renderPage(a);
-        await screen.findByText(a.id);
+        await screen.findByText(a.title as string);
         await act(() => router.navigate(`/users/${b.id}`));
-        expect(screen.queryByText(a.id)).not.toBeInTheDocument();
+        expect(screen.queryByText(a.title as string)).not.toBeInTheDocument();
         expect(screen.queryByRole("button", {name: "封鎖用戶"})).not.toBeInTheDocument();
         gate.resolve({status: 200, data: b});
-        expect(await screen.findByText(b.id)).toBeInTheDocument();
+        expect(await screen.findByText(b.title as string)).toBeInTheDocument();
     });
 
     it("does not flash the loading state during a reload", async () => {
@@ -110,7 +110,7 @@ describe("page states", () => {
         slow = true;
         await ui.click(await screen.findByRole("button", {name: "確認封鎖"}));
         await waitFor(() => expect(toast.success).toHaveBeenCalled());
-        expect(screen.getByText(user.id)).toBeInTheDocument();
+        expect(screen.getByText(user.title as string)).toBeInTheDocument();
         gate.resolve({status: 200, data: {...user, status: "banned"}});
         expect(await screen.findByRole("button", {name: "解除封鎖"})).toBeInTheDocument();
     });
@@ -121,7 +121,7 @@ describe("AdminShell lookup", () => {
         const user = adminUserFixture();
         mockApi(() => ({status: 200, data: user}));
         const {router, user: ui} = renderPage(user);
-        await screen.findByText(user.id);
+        await screen.findByText(user.title as string);
         const [shellInput] = screen.getAllByRole("textbox", {name: "使用者編號查詢"});
         expect(shellInput).toBeEnabled();
         await ui.type(shellInput, "xyz{Enter}");
@@ -158,7 +158,7 @@ describe("UserActions visibility", () => {
         const user = adminUserFixture({status: "weird" as "active"});
         mockApi(() => ({status: 200, data: user}));
         renderPage(user);
-        await screen.findByText(user.id);
+        await screen.findByText(user.title as string);
         expect(screen.queryByRole("button", {name: "封鎖用戶"})).not.toBeInTheDocument();
         expect(screen.queryByRole("button", {name: "解除封鎖"})).not.toBeInTheDocument();
         expect(screen.queryByText("用戶已刪除，無法操作")).not.toBeInTheDocument();
@@ -212,7 +212,7 @@ describe("ban", () => {
         await ui.click(await screen.findByRole("button", {name: "確認封鎖"}));
         const button = await screen.findByRole("button", {name: "解除封鎖"});
         await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
-        expect(button).toHaveFocus();
+        await waitFor(() => expect(button).toHaveFocus());
     });
 
     it("treats a 200 for an already banned user as success", async () => {
@@ -359,7 +359,7 @@ describe("leaving while pending", () => {
         const {user: ui, router} = renderPage(a);
         await ui.type(await screen.findByLabelText("備註（選填）"), "for A");
         await act(() => router.navigate(`/users/${b.id}`));
-        await screen.findByText(b.id);
+        await screen.findByText(b.title as string);
         expect(screen.getByLabelText("備註（選填）")).toHaveValue("");
     });
 });

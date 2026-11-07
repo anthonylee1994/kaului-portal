@@ -4,11 +4,12 @@ import {adminUserFixture} from "@/test/mockApi";
 import {UserSummary} from "./UserSummary";
 
 describe("UserSummary", () => {
-    it("renders the full id and all six fields", () => {
+    it("renders all six fields without showing the id", () => {
         const user = adminUserFixture({inbox_count: 7, open_reports: 2, total_reports: 9, has_active_title: false});
         render(<UserSummary user={user} />);
-        expect(screen.getByText(user.id)).toBeInTheDocument();
-        for (const label of ["建立時間", "最後活躍", "收件箱數量", "待處理舉報", "累計被舉報", "有 active Title"]) {
+        expect(screen.queryByText(user.id)).not.toBeInTheDocument();
+        expect(screen.getByText(user.title as string)).toBeInTheDocument();
+        for (const label of ["建立時間", "最後活躍", "收件箱數量", "待處理舉報", "累計被舉報", "有活躍標題"]) {
             expect(screen.getByText(label)).toBeInTheDocument();
         }
         expect(screen.getByText("7")).toBeInTheDocument();
@@ -40,7 +41,7 @@ describe("UserSummary", () => {
 
     it("shows placeholders without title, tags or avatar", () => {
         render(<UserSummary user={adminUserFixture({title: null, has_active_title: false, tags: [], avatar_url: null})} />);
-        expect(screen.getByText("（無 Title）")).toBeInTheDocument();
+        expect(screen.getByText("（無標題）")).toBeInTheDocument();
         expect(screen.getByText("（無）")).toBeInTheDocument();
         expect(screen.queryByRole("img", {name: "用戶頭像"})).not.toBeInTheDocument();
     });

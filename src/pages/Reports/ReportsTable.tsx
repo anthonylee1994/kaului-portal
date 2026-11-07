@@ -56,7 +56,7 @@ const ReportRow = ({item}: {item: ReportItem}) => {
             </td>
             <td className={CELL}>
                 <span className="relative z-10 inline-flex items-center gap-2">
-                    <UserCell id={item.target.id} title={item.target.title} avatarUrl={item.target.avatar_url} />
+                    <UserCell id={item.target.id} title={item.target.title} avatarUrl={item.target.avatar_url} avatarLink />
                     <StatusChip kind="user" value={item.target.status} />
                 </span>
             </td>
@@ -65,7 +65,7 @@ const ReportRow = ({item}: {item: ReportItem}) => {
             </td>
             <td className={CELL}>
                 <span className="relative z-10 inline-flex">
-                    <UserCell id={item.reporter_id} title={item.reporter_title} avatarUrl={item.reporter_avatar_url} />
+                    <UserCell id={item.reporter_id} title={item.reporter_title} avatarUrl={item.reporter_avatar_url} avatarLink />
                 </span>
             </td>
             <td className={CELL}>

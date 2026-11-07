@@ -71,7 +71,7 @@ export function adminUserFixture(overrides: Partial<AdminUser> = {}): AdminUser 
         open_reports: 1,
         total_reports: 2,
         has_active_title: true,
-        title: "Some title",
+        title: `User ${fixtureCounter}`,
         avatar_url: null,
         tags: [],
         ...overrides,
