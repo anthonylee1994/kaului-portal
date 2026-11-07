@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"outline-variant":"#cfc4c5","error-container":"#ffdad6","primary-fixed":"#e2e2e2","on-background":"#1a1c1c","on-secondary-fixed-variant":"#464747","on-tertiary-fixed-variant":"#474747","outline":"#7e7576","primary-container":"#1b1b1b","surface-dim":"#dadada","surface-container-highest":"#e2e2e2","background":"#f9f9f9","on-secondary-container":"#626262","inverse-primary":"#c6c6c6","on-primary-container":"#848484","on-tertiary-fixed":"#1b1b1b","inverse-surface":"#2f3131","error":"#ba1a1a","on-surface":"#1a1c1c","on-tertiary":"#ffffff","on-secondary-fixed":"#1b1c1c","on-surface-variant":"#4c4546","on-error-container":"#93000a","surface-variant":"#e2e2e2","secondary-fixed-dim":"#c7c6c6","on-primary-fixed-variant":"#474747","secondary-fixed":"#e4e2e2","tertiary":"#000000","on-secondary":"#ffffff","surface-container":"#eeeeee","secondary-container":"#e1dfdf","tertiary-fixed-dim":"#c6c6c6","on-error":"#ffffff","on-tertiary-container":"#848484","inverse-on-surface":"#f1f1f1","tertiary-container":"#1b1b1b","secondary":"#5e5e5e","surface-container-high":"#e8e8e8","surface-container-lowest":"#ffffff","surface-container-low":"#f3f3f3","surface-tint":"#5e5e5e","tertiary-fixed":"#e2e2e2","surface":"#f9f9f9","on-primary-fixed":"#1b1b1b","primary-fixed-dim":"#c6c6c6","on-primary":"#ffffff","primary":"#000000","surface-bright":"#f9f9f9"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-sm":"0.5rem","gutter-dense":"0.5rem","margin":"1.5rem","space-lg":"1rem","gutter":"1rem","space-xl":"1.5rem","space-md":"0.75rem","space-xs":"0.25rem"},"fontFamily":{"code-sm":["JetBrains Mono"],"body-sm":["Inter"],"label-caps":["Inter"],"headline-xl":["Inter"],"body-md":["Inter"],"headline-md":["Inter"],"headline-lg":["Inter"],"code-md":["JetBrains Mono"]},"fontSize":{"code-sm":["11px",{"lineHeight":"14px","fontWeight":"500"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"label-caps":["11px",{"lineHeight":"14px","letterSpacing":"0.05em","fontWeight":"600"}],"headline-xl":["28px",{"lineHeight":"34px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["16px",{"lineHeight":"22px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["20px",{"lineHeight":"26px","letterSpacing":"-0.015em","fontWeight":"700"}],"code-md":["13px",{"lineHeight":"18px","fontWeight":"500"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col justify-between"><header class="fixed top-0 left-0 w-full z-50 bg-primary text-on-primary"><div class="h-14 w-full px-4 sm:px-6 flex items-center justify-between gap-4"><div class="flex items-center gap-6"><div class="flex items-center gap-2.5"><div class="w-8 h-8 rounded-lg bg-surface-container-lowest text-primary flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">lock</span></div><span class="font-headline-md text-headline-md tracking-tight text-on-primary whitespace-nowrap">Kaului 後台系統</span></div><nav class="flex items-center gap-5 ml-2" data-active-classes="text-on-primary font-headline-md"><a aria-current="page" class="transition-colors whitespace-nowrap text-on-primary font-headline-md" data-path="reports" href="#">舉報</a><a class="text-body-md font-body-md text-on-primary/60 hover:text-on-primary transition-colors whitespace-nowrap" data-path="system-health" href="#">系統健康</a></nav></div><div class="flex items-center gap-3"><div class="hidden md:flex items-center gap-1.5"><input class="h-[30px] w-64 bg-primary-container text-on-primary placeholder:text-outline-variant font-code-sm text-code-sm px-2.5 rounded-lg border border-outline-variant/30 focus:outline-none focus:border-outline" placeholder="輸入 user id 查詢 (UUIDv7)..." type="text"/><button class="h-[30px] px-2.5 rounded-lg bg-surface-container-lowest text-primary font-headline-md text-body-sm hover:bg-surface-variant transition-colors" type="button">查詢</button></div><div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded bg-primary-container text-on-primary/80 text-code-sm font-code-sm border border-outline-variant/20"><span class="material-symbols-outlined text-[14px]">lock</span><span>Session Active</span></div><button class="h-[30px] px-3 rounded-lg border border-on-primary/30 text-on-primary hover:bg-on-primary/10 text-body-sm font-headline-md transition-colors" type="button">登出</button><div class="w-8 h-8 rounded-full bg-primary-container border border-outline-variant/30 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-14 flex-1"><div class="max-w-7xl mx-auto px-4 sm:px-6 py-6"><div class="flex flex-col w-full">
+<!-- Back navigation & metadata strip -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+<a class="inline-flex items-center gap-1.5 text-body-md font-headline-md text-on-surface hover:text-primary transition-colors group" data-path="reports" href="#">
+<span class="material-symbols-outlined text-[18px] transition-transform group-hover:-translate-x-1">arrow_back</span>
+<span>返回舉報隊列</span>
+</a>
+<div class="flex items-center gap-2">
+<span class="font-code-sm text-code-sm text-on-surface-variant uppercase tracking-wider">Queue:</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-code-sm text-code-sm">HIGH_PRIORITY_TRIAGE</span>
+<span class="text-on-surface-variant/40">•</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">Worker: op_904</span>
+</div>
+</div>
+<!-- Report Header Card -->
+<div class="bg-surface-container-lowest rounded-2xl border border-black/15 shadow-sm p-4 mb-6">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-wrap items-center gap-3">
+<!-- Reason Chip -->
+<span class="h-[22px] px-2 rounded font-code-sm text-code-sm uppercase bg-[#FEF2F2] border border-[#FECACA] text-[#B91C1C] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#B91C1C]"></span>
+          騷擾 (Harassment)
+        </span>
+<!-- Status Chip -->
+<span class="h-[22px] px-2 rounded font-code-sm text-code-sm uppercase bg-[#FFFBEB] border border-[#FDE68A] text-[#B45309] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#B45309] animate-pulse"></span>
+          待處理 (Pending)
+        </span>
+<span class="hidden sm:inline text-black/20">|</span>
+<!-- Timestamp mode="both" -->
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[15px]">schedule</span>
+<span>建立時間：</span>
+<span class="font-code-sm text-code-sm text-on-surface font-medium">2026-11-07 14:03:21</span>
+<span class="text-on-surface-variant font-code-sm text-code-sm">(12 分鐘前)</span>
+</div>
+</div>
+<!-- Case ID Full -->
+<div class="flex items-center gap-1.5 bg-surface-container-low px-2.5 py-1 rounded-lg border border-black/5">
+<span class="font-code-sm text-code-sm text-on-surface-variant/70 uppercase select-none">CASE:</span>
+<span class="font-code-sm text-code-sm text-black/60 select-all">01948a3c-99d2-7c81-8012-98abef120341</span>
+<button class="text-on-surface-variant hover:text-black transition-colors ml-1 p-0.5" onclick="navigator.clipboard.writeText('01948a3c-99d2-7c81-8012-98abef120341')" title="複製 Case ID" type="button">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main Split Layout (Desktop 2/3 and 1/3) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+<!-- LEFT 2 COLUMNS: Evidence & Context -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<!-- Report Detail Card -->
+<div class="bg-surface-container-lowest rounded-2xl border border-black/15 shadow-sm p-5">
+<div class="flex items-center justify-between pb-3 mb-3 border-b border-black/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-error">flag</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">舉報說明 (Reporter Detail)</h2>
+</div>
+<span class="font-code-sm text-code-sm px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant">PLAIN TEXT RAW</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-black/5">
+<p class="font-body-md text-body-md text-black break-words leading-relaxed select-text">此用戶在聊天室持續傳播不當威脅文字與重複垃圾訊息，甚至提及可查閱我個人真實住址，警告無效。</p>
+</div>
+</div>
+<!-- Evidence Card & Chat Snapshot -->
+<div class="bg-surface-container-lowest rounded-2xl border border-black/15 shadow-sm p-5">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b border-black/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">history_toggle_off</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">證據鏈快照 (Evidence Snapshot)</h2>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">順序：舊 → 新 (Chronological order)</span>
+</div>
+<!-- Info Snapshot Banner -->
+<div class="bg-zinc-100 border border-zinc-200 text-zinc-700 text-xs px-3 py-2.5 rounded-lg mb-5 flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-zinc-600 shrink-0 mt-0.5">info</span>
+<span class="font-body-sm text-body-sm leading-tight">證據係舉報當刻 snapshot，唔會更新 (保留期 90 天)</span>
+</div>
+<!-- Target Profile Snapshot at Report Time -->
+<div class="bg-surface-container-low border border-black/10 rounded-xl p-3.5 mb-6 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-full border border-black/10 object-cover shrink-0" data-alt="A portrait shot of a neutral street-style user profile avatar, clean urban aesthetic, soft natural daylight, minimalist monochromatic tone" referrerpolicy="no-referrer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8-CE-e0uUGg24Qn5fVUO-9q-KsCpOY4INEBbGJ-OB2y4WrQXoMb1JR-S5v3xDNCyyotkr_t1ulgMNEjqXOfcFAFcXwTPvoV9UmgTJ02FON14sfxrqYXV1DXDS5VFI0abi6gOO31mxCuk7KPYz2UVjW_0yOL2KUyxGvEpHxvx4OnuhShHqkiwx6OCMLOyDz2DvpbYda1JNHjrbTT3eCrkN46BeVWVOXN8Nt_foxO3g"/>
+<div class="min-w-0">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md text-black truncate">全職流浪貓訓練師 🐾</span>
+<span class="h-[18px] px-1.5 rounded font-code-sm text-code-sm bg-black/5 text-black/70">Snapshot</span>
+</div>
+<p class="font-code-sm text-code-sm text-black/50 mt-0.5">Match Channel: #dm-019489-f41e</p>
+</div>
+</div>
+<div class="text-right hidden sm:block">
+<span class="font-code-sm text-code-sm text-black/50 block">Snapshot Hash:</span>
+<span class="font-code-sm text-code-sm text-black/80">#sha256-8a71b2</span>
+</div>
+</div>
+<!-- Chat Stream Section (Chronological: Oldest to Newest) -->
+<div class="space-y-4 bg-surface rounded-xl p-4 border border-black/5">
+<div class="text-center my-1">
+<span class="font-code-sm text-code-sm text-black/40 bg-surface-container px-3 py-1 rounded-full">2026-11-07 13:48:10 UTC+8 • 對話建立</span>
+</div>
+<!-- Message 1: Target (Oldest) -->
+<div class="flex flex-col items-end max-w-[85%] ml-auto">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-code-sm text-code-sm text-black/50">13:51:02</span>
+<span class="font-code-sm text-code-sm font-semibold text-error">被舉報人</span>
+</div>
+<div class="bg-white text-black border border-black/15 rounded-2xl rounded-tr-sm p-3 shadow-xs">
+<p class="font-body-md text-body-md leading-relaxed">喂，你住大圍金獅花園二期對吧？別以為換個暱稱我就找不到你。</p>
+</div>
+</div>
+<!-- Message 2: Reporter -->
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-code-sm text-code-sm font-semibold text-primary">舉報人</span>
+<span class="font-code-sm text-code-sm text-black/50">13:52:14</span>
+</div>
+<div class="bg-black/5 text-black border border-black/10 rounded-2xl rounded-tl-sm p-3">
+<p class="font-body-md text-body-md leading-relaxed">你係邊位？請不要胡亂猜測及騷擾，我完全不認識你，請停止發送此類訊息。</p>
+</div>
+</div>
+<!-- Message 3: Target -->
+<div class="flex flex-col items-end max-w-[85%] ml-auto">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-code-sm text-code-sm text-black/50">13:54:40</span>
+<span class="font-code-sm text-code-sm font-semibold text-error">被舉報人</span>
+</div>
+<div class="bg-white text-black border border-black/15 rounded-2xl rounded-tr-sm p-3 shadow-xs">
+<p class="font-body-md text-body-md leading-relaxed">裝什麼純潔？等著看，你的個人資料今晚就會在Telegram全網公開。別想封鎖我，我有十幾個分身。</p>
+</div>
+</div>
+<!-- Message 4: Target (Image Attachment kind="image") -->
+<div class="flex flex-col items-end max-w-[85%] ml-auto">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-code-sm text-code-sm text-black/50">13:55:01</span>
+<span class="font-code-sm text-code-sm font-semibold text-error">被舉報人</span>
+<span class="h-[18px] px-1.5 rounded font-code-sm text-code-sm bg-black/10 text-black">kind: image</span>
+</div>
+<div class="bg-white text-black border border-black/15 rounded-2xl rounded-tr-sm p-3 shadow-xs flex flex-col gap-2">
+<div class="relative group cursor-pointer inline-block overflow-hidden rounded-lg border border-black/15" onclick="document.getElementById('lightbox-modal').classList.remove('hidden')">
+<img class="w-40 h-40 max-w-[160px] max-h-[160px] rounded-lg object-cover transition-transform duration-200 group-hover:scale-105" data-alt="A smartphone screen screenshot displaying threatening doxxing chat logs, redacted street address documents, monochromatic stark contrast with ominous highlighted text lines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIO0xAOgE2jZYXuot4hT3wOGlUucMNxNOIJXKpJguwDG49UnejHYUyzEvrC4KGR2qR4gC72kY2AcdK7aZpKnpjJQfVxJmUT27OMASTRfBHY9r2ldC0MB7bvUQy_107lXsf0BgybIbIdA_aABN9xHa4UWDKN4PAP0zfnvUaeyjYBxjpKDX_8wDhuQpQjOBxUoJetlMviDIQEW_BeMEs0KKj4dJcWGTwp641KO0UioQu"/>
+<div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[24px]">zoom_in</span>
+</div>
+</div>
+<span class="font-code-sm text-code-sm text-black/60">attachment_01_doxx_leak.png (218 KB)</span>
+</div>
+</div>
+<!-- Message 5: Reporter (Last before report) -->
+<div class="flex flex-col items-start max-w-[85%]">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-code-sm text-code-sm font-semibold text-primary">舉報人</span>
+<span class="font-code-sm text-code-sm text-black/50">13:58:30</span>
+</div>
+<div class="bg-black/5 text-black border border-black/10 rounded-2xl rounded-tl-sm p-3">
+<p class="font-body-md text-body-md leading-relaxed">已截圖存證並正式提交平台審查舉報，此行為已構成恐嚇罪行。</p>
+</div>
+</div>
+<div class="text-center my-2">
+<span class="font-code-sm text-code-sm text-error bg-error-container/40 text-on-error-container px-3 py-1 rounded border border-error/20 inline-flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">flag</span>
+              舉報於 14:03:21 觸發並鎖定對話紀錄
+            </span>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT 1 COLUMN: Target Card & Sticky Action Panel -->
+<div class="flex flex-col gap-6 lg:sticky lg:top-4">
+<!-- Target Card -->
+<div class="bg-surface-container-lowest rounded-2xl border border-black/15 shadow-sm p-5">
+<div class="flex items-center justify-between pb-3 mb-3 border-b border-black/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-on-surface">person_search</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">被舉報人檔案</h3>
+</div>
+<!-- StatusChip: [正常 (active)] -->
+<span class="h-[22px] px-2 rounded font-code-sm text-code-sm uppercase bg-[#F0FDF4] border border-[#BBF7D0] text-[#15803D] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#15803D]"></span>
+            正常 (active)
+          </span>
+</div>
+<div class="space-y-3.5">
+<!-- Target ID full text -->
+<div>
+<span class="font-code-sm text-code-sm text-on-surface-variant block mb-1">TARGET UUIDv7</span>
+<div class="flex items-start justify-between gap-2 p-2 rounded-lg bg-surface-container-low border border-black/10">
+<span class="font-code-sm text-code-sm text-black break-all select-all font-medium" id="target-uuid">01948a21-4f10-7b2a-89aa-012847120a11</span>
+<button class="h-[24px] px-2 rounded bg-white border border-black/20 text-code-sm font-code-sm hover:bg-surface-variant transition-colors shrink-0" onclick="navigator.clipboard.writeText('01948a21-4f10-7b2a-89aa-012847120a11'); this.innerText='已複製'; setTimeout(() =&gt; this.innerText='複製', 2000)" type="button">複製</button>
+</div>
+</div>
+<!-- Pending Reports Multiplier Warning -->
+<div class="p-3 rounded-xl bg-error-container/30 border border-error/20 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-error">warning</span>
+<div>
+<span class="text-body-sm font-body-sm text-black block">待處理舉報歷史</span>
+<span class="font-code-sm text-code-sm text-error">重複被舉報者 (Threshold ≥ 3)</span>
+</div>
+</div>
+<span class="font-code-md text-headline-lg font-bold text-error">4 宗</span>
+</div>
+<!-- Device & Metadata -->
+<div class="grid grid-cols-2 gap-2 text-code-sm font-code-sm text-black/70 pt-1">
+<div class="bg-surface-container-low p-2 rounded">
+<span class="text-black/40 block">帳號形式</span>
+<span>Device-Bound (無密碼)</span>
+</div>
+<div class="bg-surface-container-low p-2 rounded">
+<span class="text-black/40 block">註冊時間</span>
+<span>2026-10-12</span>
+</div>
+</div>
+<!-- Link to full profile -->
+<div class="pt-2">
+<a class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border border-black/20 bg-surface-container-lowest text-on-surface hover:bg-surface-container font-headline-md text-body-sm transition-colors" data-path="users" href="#">
+<span>查看完整用戶資料</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Action Panel (審核處置列) -->
+<div class="bg-surface-container-lowest rounded-2xl border border-black/15 shadow-sm p-5">
+<div class="flex items-center justify-between pb-3 mb-4 border-b border-black/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-on-surface">gavel</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">審核處置 (Actions)</h3>
+</div>
+<span class="h-[18px] px-1.5 rounded font-code-sm text-code-sm bg-black text-white">TRIAGE</span>
+</div>
+<!-- Note Input Area -->
+<div class="mb-4">
+<label class="font-code-sm text-code-sm text-on-surface-variant block mb-1.5" for="action-note">處置備註 (Resolution Note)</label>
+<textarea class="w-full bg-surface-container-lowest border border-black/20 rounded-xl p-2.5 text-body-sm font-body-sm text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors resize-none" id="action-note" oninput="updateCharCount(this)" placeholder="填寫處置備註（選填）..." rows="2"></textarea>
+<div class="flex justify-end mt-1">
+<span class="font-code-sm text-code-sm text-black/60" id="char-counter">0 / 200 字</span>
+</div>
+</div>
+<!-- Safe Action: Dismiss Button -->
+<button class="w-full border border-black/30 bg-surface-container-lowest hover:bg-black/5 text-black font-headline-md text-body-md py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1.5 mb-4" onclick="alert('舉報已駁回 (Case Dismissed)')" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+<span>駁回舉報 (Dismiss)</span>
+</button>
+<!-- Divider line separating safe action from dangerous action -->
+<div class="relative my-4 border-t border-black/15 text-center">
+<span class="absolute left-1/2 -top-2.5 -translate-x-1/2 bg-surface-container-lowest px-2 font-code-sm text-code-sm text-black/40 uppercase">Irreversible</span>
+</div>
+<!-- Danger Action: Ban Target Button -->
+<button class="w-full bg-[#DC2626] hover:bg-[#B91C1C] text-white font-headline-md text-body-md py-2.5 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-1.5" onclick="openBanModal()" type="button">
+<span class="material-symbols-outlined text-[18px]">block</span>
+<span>封鎖此用戶 (Ban Target)</span>
+</button>
+<!-- Explanatory Cascade Side-Effects Text -->
+<div class="mt-3.5 bg-error-container/20 border border-error/15 rounded-xl p-3">
+<div class="flex items-start gap-1.5 text-on-surface-variant font-body-sm text-body-sm leading-relaxed">
+<span class="material-symbols-outlined text-[15px] text-error shrink-0 mt-0.5">error_outline</span>
+<span class="text-black/75">
+              封鎖將關閉雙方所有進行中 match、移除 push 訂閱、自動結案針對該用戶之所有 open 舉報、中斷即時連線。
+            </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- LIGHTBOX PREVIEW MODAL -->
+<div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4 hidden" id="lightbox-modal" onclick="this.classList.add('hidden')">
+<div class="relative max-w-2xl w-full bg-surface-container-lowest rounded-2xl overflow-hidden shadow-2xl p-4" onclick="event.stopPropagation()">
+<div class="flex items-center justify-between pb-3 border-b border-black/10 mb-3">
+<span class="font-headline-md text-headline-md text-black">證據截圖放大檢視 (Snapshot Lightbox)</span>
+<button class="p-1 rounded hover:bg-black/5 text-black" onclick="document.getElementById('lightbox-modal').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="w-full flex items-center justify-center bg-black/5 rounded-xl overflow-hidden py-2">
+<img class="max-h-[716px] w-auto object-contain rounded-lg shadow-sm" data-alt="High resolution detailed digital evidence screenshot showing abusive chat logs and personal threats in crisp typography, stark industrial security view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApwwUi9F3C2LPbhmtXFhIbKapT4JsZVUwxZDWGG0EKPkLNqtMbLwfdBgSCgRPwQ4BpE9jZFtBWejz99w6LCYt5lofU6qKQJjpIkuKm9naxrfruOVp4Iy7xVTEw1kr17QiUScjaH5kFl3QFQwrVvGFxudsCrcsLHbipOjurqpPGepZWxn1HLEk1YVruNxJ2JGAzhLfwldn7mtVvo4uvpy_VFm3KJqpAH6xz77a_b-RO"/>
+</div>
+<div class="mt-3 flex items-center justify-between text-code-sm font-code-sm text-black/60">
+<span>File: attachment_01_doxx_leak.png</span>
+<button class="px-2.5 py-1 rounded bg-black text-white hover:bg-black/80 text-code-sm" type="button">下載原圖存證</button>
+</div>
+</div>
+</div>
+<!-- CONFIRM BAN MODAL (Section 4.5 ConfirmModal Implementation) -->
+<div class="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4 hidden" id="ban-confirm-modal">
+<div class="w-full max-w-lg bg-surface-container-lowest rounded-2xl border border-black shadow-2xl p-6 relative">
+<div class="flex items-center gap-3 text-error mb-4">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px] text-error">gavel</span>
+</div>
+<div>
+<h3 class="font-headline-lg text-headline-lg text-black">確認封鎖此用戶？</h3>
+<p class="font-code-sm text-code-sm text-error font-medium">ACTION_LEVEL: PERMANENT_REVOCATION</p>
+</div>
+</div>
+<div class="space-y-4 mb-6">
+<div class="p-3 bg-surface-container-low rounded-xl border border-black/10">
+<span class="font-code-sm text-code-sm text-on-surface-variant block mb-1">受處置用戶 UUIDv7：</span>
+<span class="font-code-sm text-code-sm text-black font-semibold break-all select-all">01948a21-4f10-7b2a-89aa-012847120a11</span>
+</div>
+<div class="p-3.5 bg-error-container/30 border border-error/30 rounded-xl text-body-sm font-body-sm text-black space-y-2">
+<p class="font-semibold text-error flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+            警告：此帳號為 Device-Based 綁定
+          </p>
+<p class="text-black/80 leading-relaxed">
+            執行封鎖後，該裝置之憑證將永久作廢。該用戶所有當前進行中配對 (Match) 將強制中斷，包含此案在內之 4 筆未結舉報將全數以「用戶已封鎖」結案。
+          </p>
+</div>
+</div>
+<div class="flex items-center justify-end gap-3 pt-2 border-t border-black/10">
+<button class="px-4 py-2 rounded-xl border border-black/20 bg-white hover:bg-surface-container text-black font-headline-md text-body-md transition-colors" onclick="closeBanModal()" type="button">
+          取消
+        </button>
+<button class="px-5 py-2 rounded-xl bg-error hover:bg-[#93000a] text-white font-headline-md text-body-md transition-colors shadow-sm flex items-center gap-1.5" onclick="executeBan()" type="button">
+<span class="material-symbols-outlined text-[18px]">block</span>
+<span>確認並永久封鎖</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function updateCharCount(textarea) {
+    const counter = document.getElementById('char-counter');
+    const length = textarea.value.length;
+    counter.innerText = length + ' / 200 字';
+    if (length > 200) {
+      counter.classList.remove('text-black/60');
+      counter.classList.add('text-error', 'font-bold');
+      textarea.classList.add('border-error');
+    } else {
+      counter.classList.remove('text-error', 'font-bold');
+      counter.classList.add('text-black/60');
+      textarea.classList.remove('border-error');
+    }
+  }
+
+  function openBanModal() {
+    document.getElementById('ban-confirm-modal').classList.remove('hidden');
+  }
+
+  function closeBanModal() {
+    document.getElementById('ban-confirm-modal').classList.add('hidden');
+  }
+
+  function executeBan() {
+    closeBanModal();
+    alert('用戶 01948a21-4f10-7b2a-89aa-012847120a11 已成功封鎖。\n4 宗 open 舉報已自動結案，所有相關 Session 已強制註銷。');
+  }
+</script></div></main><footer class="w-full bg-surface-container text-on-surface-variant border-t border-outline-variant/30 py-3 mt-auto"><div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 font-code-sm text-code-sm"><div>Kaului High-Frequency Moderation Engine | Restricted Access</div><div class="flex items-center gap-4"><span>Cluster: prod-ap-northeast-1</span><span class="flex items-center gap-1"><span class="inline-block w-1.5 h-1.5 rounded-full bg-on-surface-variant"></span>Latency: 14ms</span></div></div></footer></body></html>

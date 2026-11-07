@@ -1,0 +1,236 @@
+<!DOCTYPE html><html lang="zh-Hant"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登入 - Kaului 後台系統</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            surface: '#f2f2f2',
+            danger: {
+              50: '#fef2f2',
+              200: '#fecaca',
+              600: '#dc2626',
+              700: '#b91c1c'
+            },
+            warning: {
+              50: '#fffbeb',
+              200: '#fde68a',
+              700: '#b45309'
+            },
+            neutral: {
+              100: '#f4f4f5',
+              200: '#e4e4e7',
+              600: '#52525b'
+            }
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #f2f2f2;
+      color: #000000;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-border {
+      border-color: rgba(0, 0, 0, 0.15);
+    }
+    .focus-ring:focus-within {
+      border-color: #000000;
+      outline: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between font-sans selection:bg-black selection:text-white">
+
+  <!-- Top Minimal Utility Bar -->
+  
+
+  <!-- Main Center Login Area -->
+  <main class="flex-1 flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md">
+      
+      <!-- Primary Card (HeroUI Card Spec: white, rounded-2xl, border border-black/15, shadow-lg) -->
+      <div class="bg-white rounded-2xl border custom-border shadow-lg p-7 sm:p-8 space-y-6">
+        
+        <!-- Header with Lock Icon -->
+        <div class="text-center space-y-3"><h1 class="text-xl font-semibold tracking-tight text-black">管理員登入</h1></div>
+
+        <!-- Session Expired Info Bar (HeroUI status="accent" / Info alert: 条件渲染示例) -->
+        
+
+        <!-- Form Elements -->
+        <form id="login-form" class="space-y-4" onsubmit="event.preventDefault(); handleLogin();">
+          
+          <!-- Token Input Block -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-xs">
+              <label for="admin-token" class="font-medium text-black">管理員令牌 (ADMIN_TOKEN)</label>
+              
+            </div>
+            
+            <div id="input-container" class="relative rounded-xl border custom-border focus-ring transition-colors bg-white">
+              <input id="admin-token" type="password" autocomplete="off" spellcheck="false" required="" placeholder="貼上或輸入 Bearer Token..." value="" class="w-full px-3.5 py-2.5 text-sm font-mono bg-transparent rounded-xl focus:outline-none placeholder:text-black/30 placeholder:font-sans pr-10" oninput="onTokenInput()">
+              <button type="button" onclick="toggleTokenVisibility()" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-black/40 hover:text-black p-1 rounded-md transition" aria-label="切換密碼可見性">
+                <svg id="eye-icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+            
+            
+          </div>
+
+          <!-- Dynamic Error Alert Box (依照 spec 模擬展示 401 / 404 / 429 / 連續失敗提示) -->
+          
+
+          <!-- Rate Limit Warning (第 5 次失敗起提示: 同一 IP 每分鐘失敗 10 次會被鎖) -->
+          
+
+          <!-- Submit Button -->
+          <button id="login-btn" type="submit" class="w-full bg-black hover:bg-black/90 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+            <span id="btn-text" class="">登入系統</span>
+            <svg id="btn-spinner" class="hidden w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Mock State Preset Simulator (方便審閱與驗收多種後端狀態) -->
+        
+
+      </div>
+
+      <!-- Footer Policy / Security Note -->
+      
+
+    </div>
+  </main>
+
+  <!-- Sticky Mini Status Footer -->
+  
+
+  <script>
+    let countdownInterval = null;
+    let failedAttempts = 4; // 預設模擬接近警戒線
+
+    function toggleTokenVisibility() {
+      const input = document.getElementById('admin-token');
+      const icon = document.getElementById('eye-icon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+      } else {
+        input.type = 'password';
+        icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+      }
+    }
+
+    function onTokenInput() {
+      const errorBox = document.getElementById('error-alert');
+      const inputContainer = document.getElementById('input-container');
+      if (!errorBox.classList.contains('hidden')) {
+        errorBox.classList.add('hidden');
+        inputContainer.classList.remove('border-danger-200', 'bg-danger-50/20');
+        inputContainer.classList.add('custom-border');
+      }
+    }
+
+    function handleLogin() {
+      const btn = document.getElementById('login-btn');
+      const btnText = document.getElementById('btn-text');
+      const spinner = document.getElementById('btn-spinner');
+      const token = document.getElementById('admin-token').value.trim();
+
+      btn.disabled = true;
+      btnText.textContent = '驗證權限中...';
+      spinner.classList.remove('hidden');
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btnText.textContent = '登入系統';
+        spinner.classList.add('hidden');
+
+        if (!token || token.length < 32) {
+          showError('Token 格式不合規', 'ADMIN_TOKEN 長度必須 ≥ 32 個字元。');
+          return;
+        }
+
+        // 成功模擬
+        alert('登入驗證成功 (200 OK)！Token 已安全存入 sessionStorage，即將重定向至 /reports 舉報隊列。');
+      }, 700);
+    }
+
+    function showError(title, detail, requestId = 'req_0194e82b_9f81_72ad') {
+      const errorBox = document.getElementById('error-alert');
+      const titleEl = document.getElementById('error-title');
+      const detailEl = document.getElementById('error-detail');
+      const reqIdEl = document.getElementById('error-request-id');
+      const inputContainer = document.getElementById('input-container');
+
+      titleEl.textContent = title;
+      detailEl.textContent = detail;
+      reqIdEl.textContent = requestId;
+
+      errorBox.classList.remove('hidden');
+      inputContainer.classList.add('border-danger-200', 'bg-danger-50/20');
+      inputContainer.classList.remove('custom-border');
+    }
+
+    function setMockScenario(type) {
+      clearInterval(countdownInterval);
+      const btn = document.getElementById('login-btn');
+      const btnText = document.getElementById('btn-text');
+      const input = document.getElementById('admin-token');
+      const expiredAlert = document.getElementById('expired-alert');
+
+      expiredAlert.classList.add('hidden');
+      btn.disabled = false;
+      btnText.textContent = '登入系統';
+
+      if (type === 'normal') {
+        input.value = '7f9a8b1c4e2d3f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a';
+        onTokenInput();
+      } else if (type === '401') {
+        input.value = 'invalid_mock_token_12345678901234567890';
+        showError('Token 不正確 (401 UNAUTHENTICATED)', '伺服器拒絕此憑證。請向系統負責人獲取正確的 ADMIN_TOKEN。');
+      } else if (type === '404') {
+        input.value = 'test_token_server_not_configured_32chars';
+        showError('後台未啟用 (404 NOT_FOUND)', '後端伺服器未設定 ADMIN_TOKEN 環境變數，因此拒絕所有管理員端點。');
+      } else if (type === '429') {
+        let seconds = 30;
+        btn.disabled = true;
+        showError('嘗試次數過多 (429 TOO_MANY_REQUESTS)', '同一 IP 失敗達上限，已觸發暫時鎖定保護。請等待窗口重置。');
+        
+        btnText.textContent = `請等待 ${seconds} 秒後重試`;
+        countdownInterval = setInterval(() => {
+          seconds--;
+          if (seconds <= 0) {
+            clearInterval(countdownInterval);
+            btn.disabled = false;
+            btnText.textContent = '登入系統';
+            onTokenInput();
+          } else {
+            btnText.textContent = `請等待 ${seconds} 秒後重試`;
+          }
+        }, 1000);
+      }
+    }
+  </script>
+
+
+
+
+
+
+</body></html>
