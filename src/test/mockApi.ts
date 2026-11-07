@@ -1,5 +1,5 @@
 import {AxiosError, AxiosHeaders} from "axios";
-import type {AdminMetrics, AdminUser, Evidence, EvidenceMessage, ReportItem, ReportListResponse} from "@/api/types";
+import type {AdminMetrics, AdminUser, Evidence, EvidenceMessage, FailedJobItem, FailedJobsResponse, ReportItem, ReportListResponse} from "@/api/types";
 import {apiClient} from "@/api/client";
 
 export interface MockReply {
@@ -15,6 +15,8 @@ export interface RecordedRequest {
     authorization: string | null;
     params: Record<string, unknown>;
 }
+
+type DeepPartial<T> = {[K in keyof T]?: T[K] extends object ? Partial<T[K]> : T[K]};
 
 export const metricsFixture: AdminMetrics = {
     server_now: 1_700_000_000_000,
@@ -137,4 +139,34 @@ export function mockNetworkError() {
     apiClient.defaults.adapter = async config => {
         throw new AxiosError("Network Error", AxiosError.ERR_NETWORK, config, {});
     };
+}
+
+export function metricsReply(overrides: DeepPartial<AdminMetrics> = {}): MockReply {
+    const data: AdminMetrics = {
+        ...metricsFixture,
+        ...overrides,
+        db: {...metricsFixture.db, ...overrides.db},
+        jobs: {...metricsFixture.jobs, ...overrides.jobs},
+        sse: {...metricsFixture.sse, ...overrides.sse},
+        http: {...metricsFixture.http, ...overrides.http},
+        events: {...metricsFixture.events, ...overrides.events},
+    } as AdminMetrics;
+    return {status: 200, data};
+}
+
+export function failedJobFixture(overrides: Partial<FailedJobItem> = {}): FailedJobItem {
+    fixtureCounter += 1;
+    return {
+        id: fixtureId("fa11", fixtureCounter),
+        kind: "push.send",
+        attempts: 5,
+        last_error: "boom",
+        failed_at: 1_700_000_000_000,
+        ...overrides,
+    };
+}
+
+export function failedJobsReply(items: FailedJobItem[]): MockReply {
+    const data: FailedJobsResponse = {items};
+    return {status: 200, data};
 }

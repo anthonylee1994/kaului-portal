@@ -14,5 +14,11 @@ export const ResolvedCard = ({report}: {report: ReportItem}) => (
                 {t("reportDetail.resolvedAt")}:<TimeText value={report.resolved_at} mode="both" />
             </p>
         )}
+        {report.resolution_note && (
+            <div>
+                <p className="text-black/60">{t("reportDetail.resolutionNote")}</p>
+                <p className="break-words whitespace-pre-wrap">{report.resolution_note}</p>
+            </div>
+        )}
     </section>
 );

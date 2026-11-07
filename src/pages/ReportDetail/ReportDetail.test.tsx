@@ -99,6 +99,22 @@ describe("ReportDetail page", () => {
         expect(screen.getAllByText(/結案時間/)).not.toHaveLength(0);
     });
 
+    it("shows the resolution note as plain text, and omits the label when there is none", async () => {
+        const report = reportFixture({status: "dismissed", resolved_at: 1_700_000_100_000, resolution_note: "<b>not</b> abuse"});
+        mockApi(() => ({status: 200, data: report}));
+        renderPage(`/reports/${report.id}`);
+        expect(await screen.findByText("<b>not</b> abuse")).toBeInTheDocument();
+        expect(screen.getByText("處理備註")).toBeInTheDocument();
+    });
+
+    it("shows no note label for a resolved report without a note", async () => {
+        const report = reportFixture({status: "dismissed", resolved_at: 1_700_000_100_000});
+        mockApi(() => ({status: 200, data: report}));
+        renderPage(`/reports/${report.id}`);
+        await screen.findByText("此舉報已駁回");
+        expect(screen.queryByText("處理備註")).not.toBeInTheDocument();
+    });
+
     it("does not throw for a resolved report without resolved_at or an unknown status", async () => {
         const report = reportFixture({status: "escalated" as "open", resolved_at: null});
         mockApi(() => ({status: 200, data: report}));

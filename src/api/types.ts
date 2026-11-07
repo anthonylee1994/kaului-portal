@@ -13,6 +13,7 @@ export interface ReportItem {
     status: ReportStatus;
     created_at: number;
     resolved_at: number | null;
+    resolution_note?: string | null; // 處理時填嘅備註;只喺 GET /reports/{id} 且已處理、有填備註時出現
     evidence?: Evidence | null; // 只喺 GET /reports/{id};超過 90 日會被清成 null
 }
 
@@ -64,6 +65,10 @@ export interface FailedJobItem {
     attempts: number;
     last_error: string | null;
     failed_at: number;
+}
+
+export interface FailedJobsResponse {
+    items: FailedJobItem[];
 }
 
 export interface Hist {
