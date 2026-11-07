@@ -1,0 +1,5 @@
+.seed.local.md
+.env.local
+.env
+node_modules
+dist
