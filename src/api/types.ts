@@ -14,6 +14,10 @@ export interface ReportItem {
     evidence?: Evidence | null; // 只喺 GET /reports/{id};超過 90 日會被清成 null
 }
 
+export interface BanResponse {
+    status: "banned";
+}
+
 export interface ReportListResponse {
     items: ReportItem[];
     has_more: boolean;

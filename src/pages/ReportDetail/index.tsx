@@ -3,6 +3,7 @@ import {ArrowLeft} from "lucide-react";
 import {Link, useParams} from "react-router";
 import {ErrorCard} from "@/components/ErrorCard";
 import {t} from "@/i18n";
+import {ActionCard} from "./ActionCard";
 import {DetailCard} from "./DetailCard";
 import {EvidenceSection} from "./EvidenceSection";
 import {ReportHeader} from "./ReportHeader";
@@ -59,7 +60,7 @@ export const ReportDetail = () => {
                     </div>
                     <aside className="space-y-4 lg:col-start-3 lg:row-span-3 lg:row-start-1 lg:sticky lg:top-4 lg:self-start">
                         <TargetCard target={report.target} />
-                        {report.status !== "open" && <ResolvedCard report={report} />}
+                        {report.status === "open" ? <ActionCard report={report} reload={reload} /> : <ResolvedCard report={report} />}
                     </aside>
                     <div className="lg:col-span-2 lg:col-start-1">
                         <EvidenceSection report={report} />

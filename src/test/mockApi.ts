@@ -9,7 +9,9 @@ export interface MockReply {
 }
 
 export interface RecordedRequest {
+    method: string;
     url: string;
+    body: unknown;
     authorization: string | null;
     params: Record<string, unknown>;
 }
@@ -91,6 +93,8 @@ export function mockApi(handler: (request: RecordedRequest) => MockReply | Promi
         const headers = AxiosHeaders.from(config.headers as AxiosHeaders);
         const authorization = headers.get("Authorization");
         const request: RecordedRequest = {
+            method: (config.method ?? "get").toUpperCase(),
+            body: typeof config.data === "string" ? (JSON.parse(config.data) as unknown) : undefined,
             url: config.url ?? "",
             authorization: typeof authorization === "string" ? authorization : null,
             params: (config.params as Record<string, unknown> | undefined) ?? {},
