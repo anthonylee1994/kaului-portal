@@ -233,5 +233,5 @@ P2 驗收需要 > 50 個 open report。兩個做法,擇一:
 ## 6. 唔屬於本 phase
 
 - 任何 portal 前端 code(Vite 初始化屬 P1)。
-- 正式環境 `ALLOWED_ORIGINS`(加 `https://admin.kaului.com`)——屬 P7 部署。
+- 正式環境 `ALLOWED_ORIGINS`(加 `https://portal.kaului.com`,portal 部署喺 Vercel)——屬 P7 部署。
 - 對 backend 加 endpoint(`portal-spec.md` §10 缺口,MVP 唔阻塞)。

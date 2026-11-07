@@ -53,10 +53,11 @@ Kaului 嘅 admin 後台(web)。對接 `backend` repo 嘅 `/v1/admin/*`,供營運
 
 Phase 5 假設 admin 只俾 curl 用,所以冇為 admin 做 CORS 設計。但 CORS layer 係全域嘅(`ALLOWED_ORIGINS`),已 allow `Authorization` / `Content-Type` header 同 `GET/POST`,所以:
 
-- **做法**:將 portal origin 加入 backend 嘅 `ALLOWED_ORIGINS`(逗號分隔,例如 `http://localhost:5173,http://localhost:5174,https://admin.kaului.com`)。**唔使改 backend code。**
+- **做法**:將 portal origin 加入 backend 嘅 `ALLOWED_ORIGINS`(逗號分隔,例如 `http://localhost:5173,http://localhost:5174,https://portal.kaului.com`)。**唔使改 backend code。**
 - 注意 portal dev port **唔可以同 PWA 撞**(PWA 用 5173),portal 用 `5174` 並 `--strictPort`。
 - 代價:PWA 同 portal 共用同一個 allow-list。可接受,因為真正嘅保護係 `ADMIN_TOKEN`,唔係 CORS。
-- 備選(唔建議):portal 部署時做 same-origin reverse proxy 轉發 `/v1/admin/*`,免 CORS,但多一層部署。
+- 正式環境:portal 部署喺 Vercel,origin 係 `https://portal.kaului.com`(§8.1)。**Vercel preview deployment 嘅 `*.vercel.app` origin 唔會喺 allow-list**,所以 preview 打唔通 backend(CORS 擋);要驗真 backend 一律用本地 dev 或 production。唔建議為 preview 放寬 allow-list(`ALLOWED_ORIGINS` 唔支援萬用字元)。
+- 備選(唔建議):用 Vercel `rewrites` 將 `/v1/admin/*` 反向代理去 `https://api.kaului.com`,變 same-origin 免 CORS,但 admin 流量多經一層,且 Vercel 代理後 backend 見到嘅 client IP 會變成 Vercel 出口 IP,**per-IP 失敗限流(§2.1)會失準**,所以唔用。
 
 ---
 
@@ -302,7 +303,7 @@ portal/
 - 輸入欄 `autocomplete="off"`;唔 `console.log` token;錯誤上報唔帶 header。
 - 提供「登出」(清 store + `sessionStorage`)。
 - 閒置 30 分鐘自動登出(MVP 可選)。
-- Portal 部署需 HTTPS;加 CSP(`default-src 'self'`;`img-src` 允許圖床 `https://img.eservice-hk.net` 同 evidence 圖片 host;`connect-src` 允許 API origin)、`Referrer-Policy: no-referrer`、`X-Frame-Options: DENY`。
+- Portal 部署喺 Vercel(自動 HTTPS);response headers 由 `vercel.json` 設定(§8.1):CSP(`default-src 'self'`;`img-src` 允許圖床 `https://img.eservice-hk.net` 同 evidence 圖片 host;`connect-src` 允許 `https://api.kaului.com`)、`Referrer-Policy: no-referrer`、`X-Frame-Options: DENY`、`X-Content-Type-Options: nosniff`、`X-Robots-Tag: noindex, nofollow`。
 - 因為 IP 失敗限流:portal 唔好喺背景自動用舊 token 重試(會燒失敗額度)。
 
 ---
@@ -335,9 +336,9 @@ portal/
 
 ## 8. 環境與腳本
 
-| 變數            | 說明                                                                                                                 |
-| --------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `VITE_API_BASE` | API origin,**唔含 `/v1`**。`.env.development` → `http://localhost:8080`;`.env.production` → `https://api.kaului.com` |
+| 變數            | 說明                                                                                                                             |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_API_BASE` | API origin,**唔含 `/v1`**。`.env.development` → `http://localhost:8080`;正式 → `https://api.kaului.com`(Vercel 環境變數,見 §8.1) |
 
 | 指令          | 說明                            |
 | ------------- | ------------------------------- |
@@ -354,7 +355,48 @@ ADMIN_TOKEN=$(openssl rand -hex 32)          # ≥ 32 字元
 ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174
 ```
 
-部署:純靜態(SPA fallback 到 `index.html`),建議獨立子網域(如 `admin.kaului.com`),並限制來源 IP / 加 basic auth 之類外層保護(視部署平台)。
+### 8.1 部署(Vercel + `https://portal.kaului.com`)
+
+純靜態 SPA,部署喺 Vercel,正式網址 `https://portal.kaului.com`。
+
+| 項目              | 設定                                                                                                                                                                             |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework preset  | Vite;Build `pnpm build`;Output `dist`                                                                                                                                            |
+| Production branch | `main`(push 即部署)                                                                                                                                                              |
+| Domain            | 於 Vercel project 加 `portal.kaului.com`;DNS 加 `CNAME portal → cname.vercel-dns.com`(或 Vercel 指示嘅值);證書由 Vercel 自動簽發                                                 |
+| 環境變數          | `VITE_API_BASE=https://api.kaului.com`(Production)。Vite 係 **build time 內嵌**,改咗要 redeploy。`ADMIN_TOKEN` **絕不**放 Vercel env(portal 係純前端,token 由營運人員登入時輸入) |
+| Backend           | `ALLOWED_ORIGINS` 加 `https://portal.kaului.com`(§2.3),重啟 backend 生效                                                                                                         |
+| Preview           | `*.vercel.app` 唔喺 allow-list,打唔通 backend(預期行為,見 §2.3);preview 只用嚟睇靜態畫面                                                                                         |
+
+`vercel.json`(放 repo 根目錄):
+
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; img-src 'self' data: https://img.eservice-hk.net; connect-src 'self' https://api.kaului.com; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+        },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    }
+  ]
+}
+```
+
+- `rewrites` 令 `/reports/:id` 等深連結 refresh 唔 404。Vercel 會先提供 `dist` 內真實存在嘅檔案(`/assets/*`),其餘先 fallback。
+- `style-src 'unsafe-inline'` 係 HeroUI / Tailwind runtime style 常見需要;如實測唔需要就拎走。
+- Evidence 圖片 host 以 backend 實際 `IMG_URL_PREFIX` 為準(`https://img.eservice-hk.net/upload/`),如有其他 host 要補入 `img-src`。
+- 加 `robots.txt`(`Disallow: /`)作雙重保險。
+
+**外層保護**:Vercel 靜態站冇 basic auth。真正嘅保護係 `ADMIN_TOKEN` + backend per-IP 失敗限流(§2.1)。可選加強:Vercel Deployment Protection / Firewall 自訂規則(可用範圍視方案而定,上線前喺 dashboard 確認)。因為 portal 係公開網址,**登入頁嘅錯誤訊息唔好洩漏多餘資訊**(§4.2 已分流 404/401/429,屬可接受)。
 
 ---
 
@@ -514,14 +556,14 @@ P5、P6 之間冇依賴,可以對調或並行。
 
 **範圍**
 
-- 部署用嘅 CSP、`Referrer-Policy: no-referrer`、`X-Frame-Options: DENY`(§5.2),SPA fallback 到 `index.html`;`.env.production`。
+- 加 `vercel.json`(SPA rewrites + 安全 headers,§8.1)同 `public/robots.txt`。
 - 對照 §6 錯誤處理表逐行過一次,補漏(`429` 全局 toast、`401` 已登入 toast「登入已失效」)。
 - 閒置 30 分鐘自動登出(可選)。
 - Playwright E2E:依 §9 嘅 5 個場景。
 - 全部 UI 文案過一次集中到 `i18n/`;`pnpm format`。
-- 部署文件:CORS origin 要加入正式 `ALLOWED_ORIGINS`、外層 IP 限制 / basic auth 建議。
+- Vercel 部署(§8.1):連接 GitHub repo、設 `VITE_API_BASE`、綁定 `portal.kaului.com` + DNS、backend `ALLOWED_ORIGINS` 加 `https://portal.kaului.com` 並重啟。
 
-**驗收**:§9 E2E 全綠;§6 每一行都有對應手動或自動驗證;正式環境 CSP 下圖片、API call 正常,冇 console 違規報錯。
+**驗收**:§9 E2E 全綠;§6 每一行都有對應手動或自動驗證;喺 `https://portal.kaului.com` 登入成功,CSP 下圖片、API call 正常,冇 console 違規報錯;深連結(如 `/reports/<id>`)refresh 唔 404;`curl -I` 見到 §8.1 全部 headers。
 
 ### 工時總覽
 
