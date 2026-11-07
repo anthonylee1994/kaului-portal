@@ -1,5 +1,5 @@
 import {AxiosError, AxiosHeaders} from "axios";
-import type {AdminMetrics} from "@/api/types";
+import type {AdminMetrics, ReportItem, ReportListResponse} from "@/api/types";
 import {apiClient} from "@/api/client";
 
 export interface MockReply {
@@ -11,6 +11,7 @@ export interface MockReply {
 export interface RecordedRequest {
     url: string;
     authorization: string | null;
+    params: Record<string, unknown>;
 }
 
 export const metricsFixture: AdminMetrics = {
@@ -35,6 +36,33 @@ export const metricsFixture: AdminMetrics = {
     events: {max_id: 0},
 };
 
+let fixtureCounter = 0;
+
+// UUIDv7-shaped ids: the leading chars are a shared timestamp, only the tail differs.
+function fixtureId(prefix: string, n: number): string {
+    return `0192f3a1-7c2e-7b4d-${prefix}-${String(n).padStart(12, "0")}`;
+}
+
+export function reportFixture(overrides: Partial<ReportItem> = {}): ReportItem {
+    fixtureCounter += 1;
+    return {
+        id: fixtureId("8a11", fixtureCounter),
+        reporter_id: fixtureId("9b22", fixtureCounter),
+        target: {id: fixtureId("ac33", fixtureCounter), status: "active", open_reports: 1},
+        reason: "harassment",
+        detail: null,
+        status: "open",
+        created_at: 1_700_000_000_000,
+        resolved_at: null,
+        ...overrides,
+    };
+}
+
+export function reportListReply(items: ReportItem[], hasMore = false): MockReply {
+    const data: ReportListResponse = {items, has_more: hasMore};
+    return {status: 200, data};
+}
+
 export function errorBody(code: string, message = code) {
     return {error: {code, message, details: null}};
 }
@@ -48,6 +76,7 @@ export function mockApi(handler: (request: RecordedRequest) => MockReply | Promi
         const request: RecordedRequest = {
             url: config.url ?? "",
             authorization: typeof authorization === "string" ? authorization : null,
+            params: (config.params as Record<string, unknown> | undefined) ?? {},
         };
         requests.push(request);
         const reply = await handler(request);

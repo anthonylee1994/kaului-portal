@@ -109,7 +109,7 @@ Props:`{kind: "report" | "user"; value: ReportStatus | UserStatus}`。未知值(
 
 ### 4.3 `IdTag`
 
-- 顯示 UUID 前 8 字元,`font-mono text-xs`,例如 `0192f3a1`。
+- 顯示 UUID **最後 8 字元**(backend 係 UUIDv7,前 8 hex 係 timestamp 高位,同批建立嘅 ID 前綴相同,肉眼分唔到),`font-mono text-xs`,例如 `9c1e7a4b`;長度 < 8 原樣顯示。
 - 點擊複製**全文**,按鈕內短暫變「已複製」(1.5 秒);複製失敗(無 clipboard 權限)→ 唔報錯,tooltip 顯示全文俾人手動揀。
 - Hover tooltip 顯示全文 ID。
 - `<button type="button">`,可鍵盤操作(Enter / Space),`aria-label`「複製 ID」。
@@ -193,8 +193,8 @@ Props:`title`、`targetId`、`consequences: string[]`、`warning?: string`、`co
 [ 待處理 ] [ 全部 ]                                           ← Tabs
 ┌──────────────────────────────────────────────────────────┐
 │ 時間      原因     被舉報人           累犯  舉報人    狀態   │
-│ 3 分鐘前  騷擾     0192f3a1 [正常]    ② …   0192aa00  待處理 │
-│ 1 小時前  垃圾訊息 0192f3b2 [已封鎖]  ③  …   0192bb11  已處置 │
+│ 3 分鐘前  騷擾     9c1e7a4b [正常]    ② …   5d03b2f8  待處理 │
+│ 1 小時前  垃圾訊息 e41a60c7 [已封鎖]  ③  …   2b8f9d13  已處置 │
 └──────────────────────────────────────────────────────────┘
                        [ 載入更多 ]
 ```

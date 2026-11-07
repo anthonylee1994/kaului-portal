@@ -14,6 +14,11 @@ export interface ReportItem {
     evidence?: Evidence | null; // 只喺 GET /reports/{id};超過 90 日會被清成 null
 }
 
+export interface ReportListResponse {
+    items: ReportItem[];
+    has_more: boolean;
+}
+
 export interface Evidence {
     title: string | null; // target 舉報當刻嘅 active Title
     avatar_url: string | null;

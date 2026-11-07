@@ -9,6 +9,11 @@ if (typeof globalThis.ResizeObserver === "undefined") {
     };
 }
 
+// jsdom has no Element.getAnimations; the HeroUI Tabs indicator calls it on selection change.
+if (typeof Element.prototype.getAnimations !== "function") {
+    Element.prototype.getAnimations = () => [];
+}
+
 afterEach(() => {
     sessionStorage.clear();
 });
