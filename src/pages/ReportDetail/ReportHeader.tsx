@@ -4,6 +4,7 @@ import {IdTag} from "@/components/IdTag";
 import {ReasonChip} from "@/components/ReasonChip";
 import {StatusChip} from "@/components/StatusChip";
 import {TimeText} from "@/components/TimeText";
+import {UserCell} from "@/components/UserCell";
 import {t} from "@/i18n";
 
 export const ReportHeader = ({report}: {report: ReportItem}) => (
@@ -17,6 +18,12 @@ export const ReportHeader = ({report}: {report: ReportItem}) => (
                 <dt className="text-xs text-black/60">{t("reportDetail.createdAt")}</dt>
                 <dd>
                     <TimeText value={report.created_at} mode="both" />
+                </dd>
+            </div>
+            <div>
+                <dt className="text-xs text-black/60">{t("reportDetail.reporter")}</dt>
+                <dd>
+                    <UserCell id={report.reporter_id} title={report.reporter_title} avatarUrl={report.reporter_avatar_url} />
                 </dd>
             </div>
             {report.resolved_at !== null && (

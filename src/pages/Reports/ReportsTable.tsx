@@ -1,10 +1,10 @@
 import React from "react";
 import {Link} from "react-router";
 import type {ReportItem} from "@/api/types";
-import {IdTag} from "@/components/IdTag";
 import {ReasonChip} from "@/components/ReasonChip";
 import {StatusChip} from "@/components/StatusChip";
 import {TimeText} from "@/components/TimeText";
+import {UserCell} from "@/components/UserCell";
 import {t} from "@/i18n";
 import {REPEAT_OFFENDER_THRESHOLD} from "@/lib/reportRules";
 
@@ -56,7 +56,7 @@ const ReportRow = ({item}: {item: ReportItem}) => {
             </td>
             <td className={CELL}>
                 <span className="relative z-10 inline-flex items-center gap-2">
-                    <IdTag id={item.target.id} />
+                    <UserCell id={item.target.id} title={item.target.title} avatarUrl={item.target.avatar_url} />
                     <StatusChip kind="user" value={item.target.status} />
                 </span>
             </td>
@@ -65,7 +65,7 @@ const ReportRow = ({item}: {item: ReportItem}) => {
             </td>
             <td className={CELL}>
                 <span className="relative z-10 inline-flex">
-                    <IdTag id={item.reporter_id} />
+                    <UserCell id={item.reporter_id} title={item.reporter_title} avatarUrl={item.reporter_avatar_url} />
                 </span>
             </td>
             <td className={CELL}>

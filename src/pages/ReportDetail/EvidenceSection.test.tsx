@@ -31,6 +31,23 @@ describe("EvidenceSection", () => {
         expect(within(items[2]).getByText("舉報人")).toBeInTheDocument();
     });
 
+    it("shows each side's current title and avatar next to the sender label", () => {
+        const current = reportFixture({
+            ...report,
+            reporter_title: "Rep title",
+            reporter_avatar_url: "https://img.example/r.jpg",
+            target: {...report.target, title: "Tgt title", avatar_url: null},
+            evidence: evidenceFixture({messages: [evidenceMessageFixture({...fromTarget, body: "b"}), evidenceMessageFixture({...fromReporter, body: "a"})]}),
+        });
+        const {container} = render(<EvidenceSection report={current} />);
+        const items = screen.getAllByRole("listitem");
+        expect(within(items[0]).getByText("舉報人 · Rep title")).toBeInTheDocument();
+        expect(within(items[1]).getByText("被舉報人 · Tgt title")).toBeInTheDocument();
+        expect(items[0].querySelector("img")).toHaveAttribute("src", "https://img.example/r.jpg");
+        expect(items[1].querySelector("img")).toBeNull();
+        expect(container).toBeTruthy();
+    });
+
     it("shows the expired note and no chat when evidence is null", () => {
         render(<EvidenceSection report={reportFixture({evidence: null})} />);
         expect(screen.getByText("證據已超過保留期限（90 日），已被清除")).toBeInTheDocument();

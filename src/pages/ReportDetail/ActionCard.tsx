@@ -7,21 +7,10 @@ import {normalizeError, type ApiError} from "@/api/errors";
 import type {ReportItem} from "@/api/types";
 import {ConfirmModal} from "@/components/ConfirmModal";
 import {ErrorCard} from "@/components/ErrorCard";
+import {NoteField} from "@/components/NoteField";
 import {t} from "@/i18n";
-import {isNoteTooLong, noteLength} from "@/lib/noteRules";
-
-const banConsequences = [
-    t("banConfirm.consequence1"),
-    t("banConfirm.consequence2"),
-    t("banConfirm.consequence3"),
-    t("banConfirm.consequence4"),
-    t("banConfirm.consequence5"),
-    t("banConfirm.consequence6"),
-];
-
-function isNoteError(error: ApiError): boolean {
-    return error.status === 400 && error.details?.field === "note";
-}
+import {banConsequences} from "@/lib/banConsequences";
+import {isNoteFieldError, isNoteTooLong} from "@/lib/noteRules";
 
 export const ActionCard = ({report, reload}: {report: ReportItem; reload: () => void}) => {
     const navigate = useNavigate();
@@ -43,7 +32,6 @@ export const ActionCard = ({report, reload}: {report: ReportItem; reload: () => 
     }, []);
 
     const tooLong = isNoteTooLong(note);
-    const noteInvalid = tooLong || noteServerError !== null;
     const targetStatus = report.target.status;
     const canBan = targetStatus === "active" && !tooLong;
 
@@ -80,7 +68,7 @@ export const ActionCard = ({report, reload}: {report: ReportItem; reload: () => 
             } catch (e) {
                 const error = normalizeError(e);
                 if (error.status === 404) reload();
-                else if (isNoteError(error)) setNoteServerError(error.message);
+                else if (isNoteFieldError(error)) setNoteServerError(error.message);
                 else setDismissError(error);
             }
         });
@@ -95,7 +83,7 @@ export const ActionCard = ({report, reload}: {report: ReportItem; reload: () => 
                 finish();
             } catch (e) {
                 const error = normalizeError(e);
-                if (isNoteError(error)) {
+                if (isNoteFieldError(error)) {
                     setBanOpen(false);
                     setNoteServerError(error.message);
                 } else {
@@ -127,26 +115,7 @@ export const ActionCard = ({report, reload}: {report: ReportItem; reload: () => 
     return (
         <section className="space-y-3 rounded-2xl border border-black/15 bg-white p-4">
             <h2 className="text-sm font-semibold">{t("reportActions.title")}</h2>
-            <div className="space-y-1">
-                <label htmlFor="report-note" className="text-sm text-black/60">
-                    {t("reportActions.noteLabel")}
-                </label>
-                <textarea
-                    id="report-note"
-                    rows={2}
-                    value={note}
-                    disabled={pending}
-                    aria-invalid={noteInvalid}
-                    className={`w-full rounded-lg border bg-white px-3 py-2 text-sm focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 ${noteInvalid ? "border-red-300" : "border-black/15 focus:border-black/40"}`}
-                    onChange={event => handleNoteChange(event.target.value)}
-                />
-                <div className="flex items-start justify-between gap-2 text-xs">
-                    <span role={noteInvalid ? "alert" : undefined} className="text-red-700">
-                        {tooLong ? t("reportActions.noteTooLong") : noteServerError}
-                    </span>
-                    <span className={tooLong ? "font-bold text-red-700" : "text-black/60"}>{t("reportActions.noteCount", {n: noteLength(note)})}</span>
-                </div>
-            </div>
+            <NoteField id="report-note" value={note} onChange={handleNoteChange} disabled={pending} serverError={noteServerError} />
             <button
                 type="button"
                 disabled={pending || tooLong}

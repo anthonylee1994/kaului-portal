@@ -5,7 +5,9 @@ export type UserStatus = "active" | "banned" | "deleted";
 export interface ReportItem {
     id: string;
     reporter_id: string;
-    target: {id: string; status: UserStatus; open_reports: number};
+    reporter_title?: string | null; // 舉報人當前 active Title
+    reporter_avatar_url?: string | null;
+    target: {id: string; status: UserStatus; open_reports: number; title?: string | null; avatar_url?: string | null};
     reason: ReportReason;
     detail: string | null; // ≤ 500 字
     status: ReportStatus;
@@ -16,6 +18,10 @@ export interface ReportItem {
 
 export interface BanResponse {
     status: "banned";
+}
+
+export interface UnbanResponse {
+    status: "active";
 }
 
 export interface ReportListResponse {
@@ -47,6 +53,9 @@ export interface AdminUser {
     open_reports: number;
     total_reports: number;
     has_active_title: boolean;
+    title: string | null; // 當前 active Title
+    avatar_url: string | null;
+    tags: string[]; // 最多 3 個,已按字母排序
 }
 
 export interface FailedJobItem {

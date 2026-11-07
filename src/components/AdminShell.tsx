@@ -1,6 +1,7 @@
 import React from "react";
 import {Lock, User} from "lucide-react";
 import {NavLink, Outlet, useNavigate} from "react-router";
+import {UserLookupForm} from "@/components/UserLookupForm";
 import {t} from "@/i18n";
 import {sessionStore} from "@/session/sessionStore";
 
@@ -35,23 +36,7 @@ export const AdminShell = () => {
                         </nav>
                     </div>
                     <div className="flex items-center gap-3">
-                        <div className="hidden items-center gap-1.5 md:flex">
-                            <input
-                                className="h-7.5 w-64 rounded-lg border border-[#cfc4c5]/30 bg-[#1b1b1b] px-2.5 font-mono text-xs text-white placeholder:text-[#cfc4c5] focus:border-[#7e7576] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
-                                aria-label={t("shell.userLookupLabel")}
-                                placeholder={t("shell.userLookupPlaceholder")}
-                                title={t("shell.userLookupHint")}
-                                disabled
-                            />
-                            <button
-                                className="h-7.5 rounded-lg bg-white px-2.5 text-xs font-semibold text-black transition-colors hover:bg-[#e2e2e2] disabled:cursor-not-allowed disabled:opacity-60"
-                                type="button"
-                                title={t("shell.userLookupHint")}
-                                disabled
-                            >
-                                {t("shell.userLookupSubmit")}
-                            </button>
-                        </div>
+                        <UserLookupForm tone="dark" className="hidden md:flex" />
                         <button
                             className="h-7.5 cursor-pointer rounded-lg border border-white/30 px-3 text-xs font-semibold text-white transition-colors hover:bg-white/10"
                             type="button"

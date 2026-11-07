@@ -63,4 +63,15 @@ describe("IdTag", () => {
         });
         expect(onParentClick).not.toHaveBeenCalled();
     });
+
+    it("shows the label instead of the id but still copies the id", async () => {
+        const writeText = vi.fn().mockResolvedValue(undefined);
+        mockClipboard(writeText);
+        render(<IdTag id={ID} label="My title" />);
+        expect(screen.getByRole("button")).toHaveTextContent("My title");
+        await act(async () => {
+            fireEvent.click(screen.getByRole("button", {name: "複製 ID"}));
+        });
+        expect(writeText).toHaveBeenCalledWith(ID);
+    });
 });

@@ -4,6 +4,7 @@ import {Link} from "react-router";
 import type {ReportItem} from "@/api/types";
 import {IdTag} from "@/components/IdTag";
 import {StatusChip} from "@/components/StatusChip";
+import {UserCell} from "@/components/UserCell";
 import {t} from "@/i18n";
 import {REPEAT_OFFENDER_THRESHOLD} from "@/lib/reportRules";
 
@@ -12,6 +13,7 @@ export const TargetCard = ({target}: {target: ReportItem["target"]}) => {
     return (
         <section className="space-y-3 rounded-2xl border border-black/15 bg-white p-4">
             <h2 className="text-sm font-semibold">{t("reportDetail.targetTitle")}</h2>
+            <UserCell id={target.id} title={target.title} avatarUrl={target.avatar_url} />
             <div className="flex flex-wrap items-center gap-2">
                 <span className="break-all">
                     <IdTag id={target.id} full />

@@ -3,7 +3,7 @@ import {Modal} from "@heroui/react";
 import {User} from "lucide-react";
 import type {ReportItem} from "@/api/types";
 import {t} from "@/i18n";
-import {EvidenceBubble, type Side} from "./EvidenceBubble";
+import {EvidenceBubble, type Sender, type Side} from "./EvidenceBubble";
 import {SafeImage} from "./SafeImage";
 
 export const EvidenceSection = ({report}: {report: ReportItem}) => {
@@ -19,6 +19,9 @@ export const EvidenceSection = ({report}: {report: ReportItem}) => {
     }, [hasMessages]);
 
     const sideOf = (senderId: string): Side => (senderId === report.reporter_id ? "reporter" : senderId === report.target.id ? "target" : "other");
+
+    const senderOf = (side: Side): Sender | undefined =>
+        side === "reporter" ? {title: report.reporter_title, avatarUrl: report.reporter_avatar_url} : side === "target" ? {title: report.target.title, avatarUrl: report.target.avatar_url} : undefined;
 
     return (
         <section className="space-y-3 rounded-2xl border border-black/15 bg-white p-4">
@@ -39,9 +42,10 @@ export const EvidenceSection = ({report}: {report: ReportItem}) => {
                     {hasMessages ? (
                         // Backend sends newest first; show oldest first without mutating the original array.
                         <ul ref={chatRef} className="flex max-h-[480px] flex-col gap-3 overflow-y-auto">
-                            {[...evidence.messages].reverse().map(message => (
-                                <EvidenceBubble key={message.id} message={message} side={sideOf(message.sender_id)} onOpenImage={setLightboxSrc} />
-                            ))}
+                            {[...evidence.messages].reverse().map(message => {
+                                const side = sideOf(message.sender_id);
+                                return <EvidenceBubble key={message.id} message={message} side={side} sender={senderOf(side)} onOpenImage={setLightboxSrc} />;
+                            })}
                         </ul>
                     ) : (
                         <p className="py-6 text-center text-sm text-black/60">{t("reportDetail.noMessages")}</p>

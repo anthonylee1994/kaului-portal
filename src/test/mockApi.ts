@@ -1,5 +1,5 @@
 import {AxiosError, AxiosHeaders} from "axios";
-import type {AdminMetrics, Evidence, EvidenceMessage, ReportItem, ReportListResponse} from "@/api/types";
+import type {AdminMetrics, AdminUser, Evidence, EvidenceMessage, ReportItem, ReportListResponse} from "@/api/types";
 import {apiClient} from "@/api/client";
 
 export interface MockReply {
@@ -56,6 +56,24 @@ export function reportFixture(overrides: Partial<ReportItem> = {}): ReportItem {
         status: "open",
         created_at: 1_700_000_000_000,
         resolved_at: null,
+        ...overrides,
+    };
+}
+
+export function adminUserFixture(overrides: Partial<AdminUser> = {}): AdminUser {
+    fixtureCounter += 1;
+    return {
+        id: fixtureId("ac33", fixtureCounter),
+        status: "active",
+        created_at: 1_700_000_000_000,
+        last_active_at: 1_700_000_100_000,
+        inbox_count: 4,
+        open_reports: 1,
+        total_reports: 2,
+        has_active_title: true,
+        title: "Some title",
+        avatar_url: null,
+        tags: [],
         ...overrides,
     };
 }

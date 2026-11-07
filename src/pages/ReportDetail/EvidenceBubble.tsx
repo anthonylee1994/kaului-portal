@@ -1,4 +1,5 @@
 import React from "react";
+import {User} from "lucide-react";
 import type {EvidenceMessage} from "@/api/types";
 import {TimeText} from "@/components/TimeText";
 import {t} from "@/i18n";
@@ -18,11 +19,21 @@ const SIDE_LABELS = {
     other: "reportDetail.senderOther",
 } as const;
 
-export const EvidenceBubble = ({message, side, onOpenImage}: {message: EvidenceMessage; side: Side; onOpenImage: (src: string) => void}) => {
+export interface Sender {
+    title?: string | null;
+    avatarUrl?: string | null;
+}
+
+export const EvidenceBubble = ({message, side, sender, onOpenImage}: {message: EvidenceMessage; side: Side; sender?: Sender; onOpenImage: (src: string) => void}) => {
     const imageFailed = <span className="text-sm text-black/60">{t("reportDetail.imageFailed")}</span>;
     return (
         <li className={`flex max-w-[80%] flex-col gap-1 rounded-xl px-3 py-2 ${SIDE_STYLES[side]}`}>
-            <span className="text-xs text-black/60">{t(SIDE_LABELS[side])}</span>
+            <span className="flex items-center gap-1.5 text-xs text-black/60">
+                <span className="flex size-5 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black/10 text-black/40">
+                    <SafeImage src={sender?.avatarUrl ?? null} alt="" className="size-5 rounded-full object-cover" fallback={<User aria-hidden className="size-3" />} />
+                </span>
+                <span className="break-all">{sender?.title ? `${t(SIDE_LABELS[side])} · ${sender.title}` : t(SIDE_LABELS[side])}</span>
+            </span>
             {message.kind === "image" ? (
                 message.image_url === null ? (
                     imageFailed
