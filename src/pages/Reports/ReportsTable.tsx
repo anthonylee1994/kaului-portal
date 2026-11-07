@@ -6,8 +6,8 @@ import {ReasonChip} from "@/components/ReasonChip";
 import {StatusChip} from "@/components/StatusChip";
 import {TimeText} from "@/components/TimeText";
 import {t} from "@/i18n";
+import {REPEAT_OFFENDER_THRESHOLD} from "@/lib/reportRules";
 
-const REPEAT_OFFENDER_THRESHOLD = 3;
 const SKELETON_ROWS = 5;
 
 const CELL = "px-4 py-3 whitespace-nowrap";

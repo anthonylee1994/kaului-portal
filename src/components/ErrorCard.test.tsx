@@ -13,9 +13,9 @@ afterEach(() => {
 
 describe("ErrorCard", () => {
     it.each([
-        [null, "連唔到 server"],
+        [null, "無法連線至伺服器"],
         [429, "請求過多"],
-        [500, "伺服器錯誤,請稍後再試"],
+        [500, "伺服器錯誤，請稍後再試"],
     ])("title for status %s", (status, title) => {
         render(<ErrorCard error={makeError(status)} />);
         expect(screen.getByRole("alert")).toHaveTextContent(title);

@@ -2,7 +2,7 @@ import axios from "axios";
 import type {ApiErrorBody} from "./types";
 
 export class ApiError extends Error {
-    status: number | null; // null = 網絡錯 / 冇 response
+    status: number | null; // null = 網絡錯誤或沒有 response
     code: string | null; // error.code,例如 UNAUTHENTICATED
     details: {field?: string} | null;
     requestId: string | null; // X-Request-Id

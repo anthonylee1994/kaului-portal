@@ -1,8 +1,7 @@
 import React from "react";
+import {Eye, EyeOff, LoaderCircle} from "lucide-react";
 import {Navigate, useSearchParams} from "react-router";
 import {normalizeError} from "@/api/errors";
-import {EyeIcon} from "@/components/EyeIcon";
-import {Spinner} from "@/components/Spinner";
 import {t} from "@/i18n";
 import {safeRedirect} from "@/session/safeRedirect";
 import {sessionStore} from "@/session/sessionStore";
@@ -121,7 +120,7 @@ export const Login = () => {
                                     aria-pressed={visible}
                                     onClick={() => setVisible(current => !current)}
                                 >
-                                    <EyeIcon off={visible} />
+                                    {visible ? <EyeOff aria-hidden className="size-4" /> : <Eye aria-hidden className="size-4" />}
                                 </button>
                             </div>
                         </div>
@@ -142,7 +141,7 @@ export const Login = () => {
                             className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-black px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-black/90 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             <span>{pending ? t("login.submitting") : cooling ? t("login.cooldownButton", {seconds: cooldown}) : t("login.submit")}</span>
-                            {pending && <Spinner />}
+                            {pending && <LoaderCircle aria-hidden className="size-4 animate-spin text-white" />}
                         </button>
                     </form>
                 </div>

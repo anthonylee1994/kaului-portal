@@ -45,14 +45,14 @@ describe("Reports page", () => {
     it("starts on All for ?status=all", async () => {
         const requests = mockApi(() => reportListReply([]));
         renderReports("/reports?status=all");
-        await screen.findByText("未有任何舉報");
+        await screen.findByText("尚無任何舉報");
         expect(requests[0].params.status).toBe("all");
     });
 
     it("shows the open empty text", async () => {
         mockApi(() => reportListReply([]));
         renderReports();
-        expect(await screen.findByText("冇待處理舉報")).toBeInTheDocument();
+        expect(await screen.findByText("沒有待處理舉報")).toBeInTheDocument();
     });
 
     it("clears the old tab, then refetches with status=all and updates the URL", async () => {
@@ -133,14 +133,14 @@ describe("Reports page", () => {
         const {user} = renderReports();
         await screen.findByText("垃圾訊息");
         await user.click(screen.getByRole("button", {name: "重新整理"}));
-        expect(await screen.findByRole("alert")).toHaveTextContent("伺服器錯誤,請稍後再試");
+        expect(await screen.findByRole("alert")).toHaveTextContent("伺服器錯誤，請稍後再試");
         expect(screen.getByText("垃圾訊息")).toBeInTheDocument();
     });
 
     it("shows an ErrorCard on first-load failure, with tabs still usable", async () => {
         mockNetworkError();
         renderReports();
-        expect(await screen.findByRole("alert")).toHaveTextContent("連唔到 server");
+        expect(await screen.findByRole("alert")).toHaveTextContent("無法連線至伺服器");
         expect(screen.getByRole("tab", {name: "全部"})).toBeEnabled();
     });
 

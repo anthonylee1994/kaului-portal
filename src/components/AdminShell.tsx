@@ -1,7 +1,6 @@
 import React from "react";
+import {Lock, User} from "lucide-react";
 import {NavLink, Outlet, useNavigate} from "react-router";
-import {LockIcon} from "@/components/LockIcon";
-import {PersonIcon} from "@/components/PersonIcon";
 import {t} from "@/i18n";
 import {sessionStore} from "@/session/sessionStore";
 
@@ -22,7 +21,7 @@ export const AdminShell = () => {
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2.5">
                             <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-white text-black">
-                                <LockIcon className="size-4.5" />
+                                <Lock aria-hidden className="size-4.5" />
                             </div>
                             <span className="hidden text-base font-semibold tracking-tight whitespace-nowrap sm:inline">{t("app.name")}</span>
                         </div>
@@ -61,7 +60,7 @@ export const AdminShell = () => {
                             {t("shell.logout")}
                         </button>
                         <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[#cfc4c5]/30 bg-[#1b1b1b] text-white" aria-hidden>
-                            <PersonIcon className="size-4.5" />
+                            <User aria-hidden className="size-4.5" />
                         </div>
                     </div>
                 </div>

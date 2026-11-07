@@ -70,7 +70,7 @@ describe("Login page", () => {
         mockNetworkError();
         const {user} = renderLogin();
         await attempt(user);
-        expect(await screen.findByText("連唔到 server")).toBeInTheDocument();
+        expect(await screen.findByText("無法連線至伺服器")).toBeInTheDocument();
     });
 
     it("shows the generic server error with the request id", async () => {
@@ -96,13 +96,13 @@ describe("Login page", () => {
         });
         vi.useFakeTimers({shouldAdvanceTime: true});
         await attempt(user);
-        expect(await screen.findByText("嘗試次數過多,請 3 秒後再試")).toBeInTheDocument();
+        expect(await screen.findByText("嘗試次數過多，請 3 秒後再試")).toBeInTheDocument();
         expect(screen.getByRole("button", {name: "請等待 3 秒後重試"})).toBeDisabled();
 
         await act(async () => {
             vi.advanceTimersByTime(1000);
         });
-        expect(screen.getByText("嘗試次數過多,請 2 秒後再試")).toBeInTheDocument();
+        expect(screen.getByText("嘗試次數過多，請 2 秒後再試")).toBeInTheDocument();
 
         await act(async () => {
             vi.advanceTimersByTime(2000);
@@ -116,7 +116,7 @@ describe("Login page", () => {
         mockApi(() => ({status: 429, data: errorBody("RATE_LIMITED")}));
         const {user} = renderLogin();
         await attempt(user);
-        expect(await screen.findByText("嘗試次數過多,請 60 秒後再試")).toBeInTheDocument();
+        expect(await screen.findByText("嘗試次數過多，請 60 秒後再試")).toBeInTheDocument();
         expect(warn).toHaveBeenCalledTimes(1);
     });
 
@@ -127,9 +127,9 @@ describe("Login page", () => {
             await attempt(user, `wrong-${i}`);
             expect(await screen.findByText("令牌不正確")).toBeInTheDocument();
         }
-        expect(screen.queryByText("同一 IP 每分鐘失敗 10 次會被鎖")).not.toBeInTheDocument();
+        expect(screen.queryByText("同一 IP 每分鐘失敗 10 次將被鎖定")).not.toBeInTheDocument();
         await attempt(user, "wrong-5");
-        expect(await screen.findByText("同一 IP 每分鐘失敗 10 次會被鎖")).toBeInTheDocument();
+        expect(await screen.findByText("同一 IP 每分鐘失敗 10 次將被鎖定")).toBeInTheDocument();
     });
 
     it("does not count 404 or network errors towards the lock warning", async () => {
@@ -139,7 +139,7 @@ describe("Login page", () => {
             await attempt(user, `t-${i}`);
             await waitFor(() => expect(submit()).toBeEnabled());
         }
-        expect(screen.queryByText("同一 IP 每分鐘失敗 10 次會被鎖")).not.toBeInTheDocument();
+        expect(screen.queryByText("同一 IP 每分鐘失敗 10 次將被鎖定")).not.toBeInTheDocument();
     });
 
     it("navigates to the safe redirect after a successful login", async () => {
@@ -160,7 +160,7 @@ describe("Login page", () => {
     it("shows the expired notice once", () => {
         sessionStore.setState({logoutReason: "expired"});
         renderLogin();
-        expect(screen.getByText("登入已失效,請重新登入")).toBeInTheDocument();
+        expect(screen.getByText("登入已失效，請重新登入")).toBeInTheDocument();
         expect(sessionStore.getState().logoutReason).toBeNull();
     });
 });

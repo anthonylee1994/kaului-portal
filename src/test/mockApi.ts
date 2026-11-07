@@ -1,5 +1,5 @@
 import {AxiosError, AxiosHeaders} from "axios";
-import type {AdminMetrics, ReportItem, ReportListResponse} from "@/api/types";
+import type {AdminMetrics, Evidence, EvidenceMessage, ReportItem, ReportListResponse} from "@/api/types";
 import {apiClient} from "@/api/client";
 
 export interface MockReply {
@@ -56,6 +56,23 @@ export function reportFixture(overrides: Partial<ReportItem> = {}): ReportItem {
         resolved_at: null,
         ...overrides,
     };
+}
+
+export function evidenceMessageFixture(overrides: Partial<EvidenceMessage> = {}): EvidenceMessage {
+    fixtureCounter += 1;
+    return {
+        id: fixtureId("5e44", fixtureCounter),
+        sender_id: fixtureId("9b22", fixtureCounter),
+        kind: "text",
+        body: "hello",
+        image_url: null,
+        created_at: 1_700_000_000_000,
+        ...overrides,
+    };
+}
+
+export function evidenceFixture(overrides: Partial<Evidence> = {}): Evidence {
+    return {title: "Some title", avatar_url: null, messages: [], ...overrides};
 }
 
 export function reportListReply(items: ReportItem[], hasMore = false): MockReply {

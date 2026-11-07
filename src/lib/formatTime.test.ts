@@ -14,8 +14,8 @@ describe("formatRelativeTime", () => {
         [59 * M, "59 分鐘前"],
         [60 * M, "1 小時前"],
         [23 * H, "23 小時前"],
-        [24 * H, "1 日前"],
-        [29 * D, "29 日前"],
+        [24 * H, "1 天前"],
+        [29 * D, "29 天前"],
     ])("%i ms ago", (diff, expected) => {
         expect(formatRelativeTime(ago(diff), NOW)).toBe(expected);
     });

@@ -22,7 +22,7 @@ export interface ReportListResponse {
 export interface Evidence {
     title: string | null; // target 舉報當刻嘅 active Title
     avatar_url: string | null;
-    messages: EvidenceMessage[]; // reporter ↔ target 最近 20 則,新→舊;冇互動 = []
+    messages: EvidenceMessage[]; // reporter ↔ target 最近 20 則,新→舊;沒有互動 = []
 }
 
 export interface EvidenceMessage {
@@ -75,7 +75,7 @@ export interface AdminMetrics {
     sse: {connections: number; evictions_total: number};
     http: {
         responses_5xx_total: number;
-        rate_limited_total: Record<string, number>; // key 動態,唔寫死
+        rate_limited_total: Record<string, number>; // key 為動態,不可寫死
     };
     events: {max_id: number};
 }

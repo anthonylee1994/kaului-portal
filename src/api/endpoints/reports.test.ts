@@ -1,6 +1,6 @@
 import {sessionStore} from "@/session/sessionStore";
-import {errorBody, mockApi, reportListReply} from "@/test/mockApi";
-import {listReports} from "./reports";
+import {errorBody, mockApi, reportFixture, reportListReply} from "@/test/mockApi";
+import {getReport, listReports} from "./reports";
 
 beforeEach(() => {
     sessionStore.setState({token: "t", logoutReason: null});
@@ -24,5 +24,31 @@ describe("listReports", () => {
         mockApi(() => ({status: 401, data: errorBody("UNAUTHENTICATED")}));
         await expect(listReports({status: "open"})).rejects.toMatchObject({status: 401});
         expect(sessionStore.getState().token).toBeNull();
+    });
+});
+
+describe("getReport", () => {
+    it("requests /admin/reports/<id>", async () => {
+        const requests = mockApi(() => ({status: 200, data: reportFixture()}));
+        await getReport("abc");
+        expect(requests[0].url).toBe("/admin/reports/abc");
+    });
+
+    it("encodes special characters in the id", async () => {
+        const requests = mockApi(() => ({status: 200, data: reportFixture()}));
+        await getReport("a/b?c#d");
+        expect(requests[0].url).toBe("/admin/reports/a%2Fb%3Fc%23d");
+    });
+
+    it("logs out on 401 while logged in", async () => {
+        mockApi(() => ({status: 401, data: errorBody("UNAUTHENTICATED")}));
+        await expect(getReport("abc")).rejects.toMatchObject({status: 401});
+        expect(sessionStore.getState().token).toBeNull();
+    });
+
+    it("does not log out on 404", async () => {
+        mockApi(() => ({status: 404, data: errorBody("NOT_FOUND")}));
+        await expect(getReport("abc")).rejects.toMatchObject({status: 404});
+        expect(sessionStore.getState().token).toBe("t");
     });
 });
