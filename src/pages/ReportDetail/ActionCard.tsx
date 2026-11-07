@@ -1,5 +1,4 @@
 import React from "react";
-import {toast} from "@heroui/react";
 import {Loader2} from "lucide-react";
 import {useNavigate} from "react-router";
 import {banFromReport, dismissReport} from "@/api/endpoints/reports";
@@ -9,6 +8,7 @@ import {ConfirmModal} from "@/components/ConfirmModal";
 import {ErrorCard} from "@/components/ErrorCard";
 import {NoteField} from "@/components/NoteField";
 import {t} from "@/i18n";
+import {notifySuccess, notifyWarning} from "@/lib/notify";
 import {banConsequences} from "@/lib/banConsequences";
 import {isNoteFieldError, isNoteTooLong} from "@/lib/noteRules";
 
@@ -58,11 +58,11 @@ export const ActionCard = ({report, reload}: {report: ReportItem; reload: () => 
             try {
                 const next = await dismissReport(report.id, note);
                 if (next.status === "dismissed") {
-                    toast.success(t("reportActions.dismissedToast"));
+                    notifySuccess(t("reportActions.dismissedToast"));
                     finish();
                 } else {
                     // Already handled elsewhere: not our dismiss. Refetch instead of trusting a body that may lack evidence.
-                    toast.warning(t("reportActions.alreadyHandledToast"));
+                    notifyWarning(t("reportActions.alreadyHandledToast"));
                     reload();
                 }
             } catch (e) {
@@ -79,7 +79,7 @@ export const ActionCard = ({report, reload}: {report: ReportItem; reload: () => 
             try {
                 await banFromReport(report.id, note);
                 setBanOpen(false);
-                toast.success(t("reportActions.bannedToast"));
+                notifySuccess(t("reportActions.bannedToast"));
                 finish();
             } catch (e) {
                 const error = normalizeError(e);

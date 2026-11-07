@@ -163,4 +163,12 @@ describe("Login page", () => {
         expect(screen.getByText("登入已失效，請重新登入")).toBeInTheDocument();
         expect(sessionStore.getState().logoutReason).toBeNull();
     });
+
+    it("shows the idle notice once", () => {
+        sessionStore.setState({logoutReason: "idle"});
+        renderLogin();
+        expect(screen.getByText("因閒置超過 30 分鐘，已自動登出")).toBeInTheDocument();
+        expect(screen.queryByText("登入已失效，請重新登入")).not.toBeInTheDocument();
+        expect(sessionStore.getState().logoutReason).toBeNull();
+    });
 });

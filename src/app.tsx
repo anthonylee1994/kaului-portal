@@ -8,7 +8,7 @@ export const App = () => {
         <React.Fragment>
             <RouterProvider router={router} />
             {/* Outside the router so a toast survives the navigation that follows a successful action. */}
-            <Toast.Provider placement="top end" />
+            <Toast.Provider placement="top end" maxVisibleToasts={3} />
         </React.Fragment>
     );
 };

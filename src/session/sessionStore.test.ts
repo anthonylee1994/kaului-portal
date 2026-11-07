@@ -61,6 +61,14 @@ describe("sessionStore.logout", () => {
         expect(sessionStore.getState().logoutReason).toBeNull();
     });
 
+    it("sets logoutReason idle and clears storage", () => {
+        sessionStorage.setItem("kaului.portal.token", "t");
+        sessionStore.setState({token: "t"});
+        sessionStore.getState().logout({reason: "idle"});
+        expect(sessionStore.getState().logoutReason).toBe("idle");
+        expect(sessionStorage.getItem("kaului.portal.token")).toBeNull();
+    });
+
     it("sets logoutReason when expired", () => {
         sessionStore.setState({token: "t"});
         sessionStore.getState().logout({reason: "expired"});

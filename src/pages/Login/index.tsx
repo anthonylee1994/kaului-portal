@@ -14,7 +14,7 @@ type LoginError = {kind: "notEnabled"} | {kind: "invalidToken"} | {kind: "rateLi
 export const Login = () => {
     const [searchParams] = useSearchParams();
     const sessionToken = sessionStore(state => state.token);
-    const [showExpired] = React.useState(() => sessionStore.getState().logoutReason === "expired");
+    const [logoutReason] = React.useState(() => sessionStore.getState().logoutReason);
     const [value, setValue] = React.useState("");
     const [visible, setVisible] = React.useState(false);
     const [pending, setPending] = React.useState(false);
@@ -22,7 +22,7 @@ export const Login = () => {
     const [failCount, setFailCount] = React.useState(0);
     const [cooldown, setCooldown] = React.useState(0);
 
-    // The expired notice is shown once, then dropped from the store.
+    // The logout notice is shown once, then dropped from the store.
     React.useEffect(() => {
         sessionStore.getState().clearLogoutReason();
     }, []);
@@ -92,9 +92,9 @@ export const Login = () => {
                 <div className="space-y-6 rounded-2xl border border-black/15 bg-white p-7 shadow-lg sm:p-8">
                     <h1 className="text-center text-xl font-semibold tracking-tight">{t("login.title")}</h1>
                     <form className="space-y-4" onSubmit={handleSubmit}>
-                        {showExpired && (
+                        {logoutReason && (
                             <div role="status" className="rounded-xl border border-zinc-200 bg-zinc-100 px-3.5 py-2.5 text-sm text-zinc-600">
-                                {t("login.expired")}
+                                {logoutReason === "idle" ? t("login.idleLoggedOut") : t("login.expired")}
                             </div>
                         )}
                         <div className="space-y-1.5">

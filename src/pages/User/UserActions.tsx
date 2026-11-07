@@ -1,11 +1,11 @@
 import React from "react";
-import {toast} from "@heroui/react";
 import {banUser, unbanUser} from "@/api/endpoints/users";
 import {normalizeError, type ApiError} from "@/api/errors";
 import type {AdminUser} from "@/api/types";
 import {ConfirmModal} from "@/components/ConfirmModal";
 import {NoteField} from "@/components/NoteField";
 import {t} from "@/i18n";
+import {notifyError, notifySuccess} from "@/lib/notify";
 import {banConsequences} from "@/lib/banConsequences";
 import {isNoteFieldError, isNoteTooLong} from "@/lib/noteRules";
 
@@ -44,7 +44,7 @@ export const UserActions = ({user, reload}: {user: AdminUser; reload: () => void
                 await banUser(user.id, note);
             }
             // Both calls are idempotent: any 200 is a success, and the refetch shows the real state.
-            toast.success(banned ? t("user.unbannedToast") : t("user.bannedToast"));
+            notifySuccess(banned ? t("user.unbannedToast") : t("user.bannedToast"));
             if (mounted.current) {
                 setOpen(false);
                 setNote("");
@@ -53,7 +53,7 @@ export const UserActions = ({user, reload}: {user: AdminUser; reload: () => void
         } catch (e) {
             const failure = normalizeError(e);
             if (failure.status === 404) {
-                toast.danger(t("user.actionNotFound"), {timeout: 0});
+                notifyError(t("user.actionNotFound"));
                 if (mounted.current) {
                     setOpen(false);
                     reload();

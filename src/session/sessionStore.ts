@@ -6,9 +6,9 @@ const STORAGE_KEY = "kaului.portal.token";
 
 export interface SessionState {
     token: string | null;
-    logoutReason: "expired" | null; // 供 /login 顯示「登入已失效」
+    logoutReason: "expired" | "idle" | null; // 供 /login 顯示「登入已失效」/「閒置登出」
     login: (token: string) => Promise<void>; // 成功 resolve,失敗 throw ApiError
-    logout: (options?: {reason?: "expired"}) => void;
+    logout: (options?: {reason?: "expired" | "idle"}) => void;
     clearLogoutReason: () => void;
 }
 

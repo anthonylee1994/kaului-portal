@@ -1,6 +1,7 @@
 import axios from "axios";
 import {sessionStore} from "@/session/sessionStore";
 import {normalizeError} from "./errors";
+import {notifyRateLimited} from "./notifyRateLimited";
 
 declare module "axios" {
     interface AxiosRequestConfig {
@@ -29,6 +30,10 @@ apiClient.interceptors.response.use(undefined, (error: unknown) => {
     const config = axios.isAxiosError(error) ? error.config : undefined;
     if (apiError.status === 401 && !config?.skipAuthRedirect && sessionStore.getState().token) {
         sessionStore.getState().logout({reason: "expired"});
+    }
+    // The login probe has its own countdown UI, so it never raises the global toast.
+    if (apiError.status === 429 && !config?.skipAuthRedirect) {
+        notifyRateLimited(apiError);
     }
     return Promise.reject(apiError);
 });

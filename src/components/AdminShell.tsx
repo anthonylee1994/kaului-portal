@@ -2,11 +2,13 @@ import React from "react";
 import {Lock, User} from "lucide-react";
 import {NavLink, Outlet, useNavigate} from "react-router";
 import {UserLookupForm} from "@/components/UserLookupForm";
+import {useIdleLogout} from "@/hooks/useIdleLogout";
 import {t} from "@/i18n";
 import {sessionStore} from "@/session/sessionStore";
 
 export const AdminShell = () => {
     const navigate = useNavigate();
+    useIdleLogout();
 
     const handleLogout = () => {
         sessionStore.getState().logout();

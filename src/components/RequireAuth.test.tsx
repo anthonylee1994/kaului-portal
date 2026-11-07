@@ -1,5 +1,5 @@
 import React from "react";
-import {render, screen} from "@testing-library/react";
+import {act, render, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {createMemoryRouter, RouterProvider} from "react-router";
 import {routes} from "@/router";
@@ -27,6 +27,23 @@ describe("RequireAuth", () => {
         const router = renderAt("/reports");
         expect(router.state.location.pathname).toBe("/reports");
         expect(screen.getByRole("button", {name: "登出"})).toBeInTheDocument();
+    });
+
+    it("logs out idle admins and sends them to /login with the way back", () => {
+        vi.useFakeTimers();
+        try {
+            sessionStore.setState({token: "t"});
+            const router = renderAt("/reports/x?a=1");
+            act(() => {
+                vi.advanceTimersByTime(30 * 60 * 1000);
+            });
+            expect(sessionStore.getState().token).toBeNull();
+            expect(router.state.location.pathname).toBe("/login");
+            expect(screen.getByText("因閒置超過 30 分鐘，已自動登出")).toBeInTheDocument();
+            expect(router.state.location.search).toBe("?redirect=%2Freports%2Fx%3Fa%3D1");
+        } finally {
+            vi.useRealTimers();
+        }
     });
 
     it("redirects / to /reports", () => {
