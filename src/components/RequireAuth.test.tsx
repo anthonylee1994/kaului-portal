@@ -5,9 +5,11 @@ import {createMemoryRouter, RouterProvider} from "react-router";
 import {routes} from "@/router";
 import {sessionStore} from "@/session/sessionStore";
 
-function renderAt(path: string) {
+async function renderAt(path: string) {
     const router = createMemoryRouter(routes, {initialEntries: [path]});
     render(<RouterProvider router={router} />);
+    // Pages are lazy routes; let their imports resolve before asserting.
+    await act(() => vi.dynamicImportSettled());
     return router;
 }
 
@@ -16,24 +18,24 @@ beforeEach(() => {
 });
 
 describe("RequireAuth", () => {
-    it("redirects to /login with an encoded redirect when there is no token", () => {
-        const router = renderAt("/reports/x");
+    it("redirects to /login with an encoded redirect when there is no token", async () => {
+        const router = await renderAt("/reports/x");
         expect(router.state.location.pathname).toBe("/login");
         expect(router.state.location.search).toBe("?redirect=%2Freports%2Fx");
     });
 
-    it("renders the page inside the shell when logged in", () => {
+    it("renders the page inside the shell when logged in", async () => {
         sessionStore.setState({token: "t"});
-        const router = renderAt("/reports");
+        const router = await renderAt("/reports");
         expect(router.state.location.pathname).toBe("/reports");
         expect(screen.getByRole("button", {name: "登出"})).toBeInTheDocument();
     });
 
-    it("logs out idle admins and sends them to /login with the way back", () => {
+    it("logs out idle admins and sends them to /login with the way back", async () => {
         vi.useFakeTimers();
         try {
             sessionStore.setState({token: "t"});
-            const router = renderAt("/reports/x?a=1");
+            const router = await renderAt("/reports/x?a=1");
             act(() => {
                 vi.advanceTimersByTime(30 * 60 * 1000);
             });
@@ -46,15 +48,15 @@ describe("RequireAuth", () => {
         }
     });
 
-    it("redirects / to /reports", () => {
+    it("redirects / to /reports", async () => {
         sessionStore.setState({token: "t"});
-        const router = renderAt("/");
+        const router = await renderAt("/");
         expect(router.state.location.pathname).toBe("/reports");
     });
 
     it("logout lands on plain /login", async () => {
         sessionStore.setState({token: "t"});
-        const router = renderAt("/reports");
+        const router = await renderAt("/reports");
         await userEvent.click(screen.getByRole("button", {name: "登出"}));
         expect(sessionStore.getState().token).toBeNull();
         expect(router.state.location.pathname).toBe("/login");

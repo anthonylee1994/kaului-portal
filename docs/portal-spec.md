@@ -262,7 +262,7 @@ portal/
 └─ src/
    ├─ main.tsx
    ├─ app.tsx
-   ├─ router.tsx              # includes RequireAuth
+   ├─ router.tsx              # includes RequireAuth; pages are lazy routes (Login + shell eager)
    ├─ api/
    │  ├─ types.ts             # §3.2
    │  ├─ client.ts            # axios instance; Bearer, error normalization, X-Request-Id
