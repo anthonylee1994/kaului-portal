@@ -23,6 +23,7 @@ function digits(key: Parameters<typeof t>[0], param: string) {
 const openReportLink = (page: Page, reportId: string) => page.getByRole("link", {name: t("reports.openReport", {id: reportId.slice(-8)})});
 
 // Scenarios depend on each other (shared accounts, shared IP limit) and #5 locks the IP, so order is fixed.
+// biome-ignore format: Biome splits the `test.describe.serial` member chain and re-indents the whole block.
 test.describe.serial("portal against a real backend", () => {
     let reporter: Account;
     let dismissTarget: Account & {titleId: string};

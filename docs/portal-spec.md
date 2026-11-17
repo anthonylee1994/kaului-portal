@@ -345,7 +345,7 @@ portal/
 | `pnpm dev`    | `vite --port 5174 --strictPort` |
 | `pnpm build`  | Production build                |
 | `pnpm test`   | Vitest                          |
-| `pnpm format` | Prettier                        |
+| `pnpm format` | Biome                           |
 
 Local integration with the backend:
 
@@ -437,7 +437,7 @@ The following require new backend endpoints before they can be implemented; the 
 
 ## 11. Implementation Phases
 
-Each phase is a slice that can be merged and accepted independently. The order has dependencies and must not be skipped. After each code change, run only Prettier (`pnpm format`); do not run ESLint / type check (see the global standard).
+Each phase is a slice that can be merged and accepted independently. The order has dependencies and must not be skipped. After each code change, run only Biome format (`pnpm format`); do not run ESLint / type check (see the global standard).
 
 ```
 P0 Prereqs ─► P1 Skeleton+Login ─► P2 Report list ─► P3 Report detail ─► P4 Actions ─┐

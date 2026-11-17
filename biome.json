@@ -1,0 +1,17 @@
+{
+    "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+    "vcs": {"enabled": true, "clientKind": "git", "useIgnoreFile": true},
+    "files": {"includes": ["**", "!**/*.md", "!pnpm-lock.yaml", "!specs", "!scripts", "!.seed.local.md"]},
+    "formatter": {
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 200,
+        "bracketSpacing": false
+    },
+    "javascript": {
+        "formatter": {"trailingCommas": "es5", "arrowParentheses": "asNeeded"}
+    },
+    "css": {"parser": {"tailwindDirectives": true}},
+    "linter": {"enabled": false},
+    "assist": {"enabled": false}
+}
